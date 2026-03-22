@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LumiClay | The Art of Earth and Fire</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-primary":"#faf7f7","surface-container-high":"#e5eae0","outline":"#767c74",
+        "on-primary-container":"#525252","tertiary-container":"#eeb496",
+        "surface":"#fafaf5","surface-container-highest":"#dee4da","background":"#fafaf5",
+        "surface-container-low":"#f3f4ee","on-tertiary-container":"#59331d",
+        "inverse-surface":"#0d0f0c","on-tertiary":"#fff7f5","surface-bright":"#fafaf5",
+        "surface-dim":"#d5dcd0","secondary-fixed":"#f4e0be","on-secondary-container":"#5e5036",
+        "secondary":"#5C3D2E","primary":"#5f5e5e","tertiary":"#A0674A",
+        "surface-variant":"#dee4da","primary-container":"#e4e2e1",
+        "on-background":"#2e342d","secondary-container":"#f4e0be",
+        "on-surface-variant":"#5b6159","on-secondary":"#fff8f1","primary-dim":"#525252",
+        "on-surface":"#2e342d","outline-variant":"#aeb4aa",
+        "surface-container-lowest":"#ffffff","surface-container":"#ecefe7",
+        "secondary-dim":"#4A2E22","secondary-fixed-dim":"#e6d2b0",
+        "gold":"#c9a96e","kiln":"#2c2820",
+      },
+      fontFamily: { "headline":["Noto Serif"], "body":["Manrope"], "label":["Manrope"] },
+      borderRadius: {"DEFAULT":"0.25rem","lg":"0.75rem","xl":"1rem","full":"9999px"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  display: inline-block; line-height: 1;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+
+/* ── Scroll Fade In ── */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in-d1 { transition-delay: 0.1s; }
+.fade-in-d2 { transition-delay: 0.2s; }
+.fade-in-d3 { transition-delay: 0.3s; }
+.fade-in-d4 { transition-delay: 0.4s; }
+
+/* ── Nav hero state (white text on transparent) ── */
+#mainNav.nav-hero a,
+#mainNav.nav-hero button,
+#mainNav.nav-hero .material-symbols-outlined { color: rgba(255,255,255,0.9) !important; }
+#mainNav.nav-hero a:hover { color: #fff !important; }
+#mainNav.nav-hero a.border-b { border-color: rgba(255,255,255,0.3) !important; }
+#mainNav.nav-hero img { filter: none; }
+#mainNav.nav-hero .bg-tertiary { background: #d4a088 !important; color: #fff !important; }
+
+/* ── Mega Menu (full-width, JS-controlled) ── */
+.mega-panel {
+  position: fixed;
+  top: auto;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s;
+  z-index: 200;
+}
+.mega-panel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ── Hero Slider ── */
+.slider-track {
+  display: flex; height: 100%;
+  transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.slide { min-width: 100%; height: 100%; position: relative; }
+.slide-content > * {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.slide.active .slide-content > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.3s; }
+.slide.active .slide-content > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.5s; }
+.slide.active .slide-content > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.7s; }
+.slide.active .slide-content > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:0.9s; }
+
+.slider-dot {
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: rgba(255,255,255,0.4); border: none; cursor: pointer;
+  transition: width 0.35s, background 0.35s;
+}
+.slider-dot.active { width: 32px; background: #fff; }
+
+.slider-progress {
+  position: absolute; bottom: 0; left: 0; height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--tw-gold, #c9a96e), #d4a088);
+  z-index: 20;
+}
+
+/* ── Best Seller Swipe ── */
+.bs-scroll {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.bs-scroll > * { scroll-snap-align: start; }
+.bubble-tab {
+  transition: all 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.bubble-tab.active {
+  background: #5C3D2E !important;
+  border-color: #5C3D2E !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px rgba(92,61,46,0.25);
+}
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- ═══════════════════════════════════
+     MEGA MENU NAVIGATION
+     ═══════════════════════════════════ -->
+<nav class="fixed top-0 w-full z-[100] transition-all duration-500" id="mainNav">
+<div class="relative flex items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+
+<!-- Left Navigation with Mega Menu -->
+<div class="hidden md:flex gap-8 items-center">
+  <!-- SHOP Mega Trigger -->
+  <div class="mega-trigger">
+    <a class="text-secondary border-b border-secondary/30 pb-1 font-label text-sm tracking-wide cursor-pointer" href="#">Shop</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-6 gap-8">
+            <!-- Left: Category list -->
+            <div class="col-span-2 space-y-6 pr-8 border-r border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-6">Find Your Light</h3>
+              <a href="#" class="flex items-center gap-4 group py-2">
+                <span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Vases & Vessels</span>
+              </a>
+              <a href="#" class="flex items-center gap-4 group py-2">
+                <span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Earrings</span>
+              </a>
+              <a href="#" class="flex items-center gap-4 group py-2">
+                <span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Bracelets</span>
+              </a>
+              <a href="#" class="flex items-center gap-4 group py-2">
+                <span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Necklaces</span>
+              </a>
+              <a href="#" class="flex items-center gap-4 group py-2">
+                <span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                <span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Figurines</span>
+              </a>
+              <div class="pt-4">
+                <a href="#" class="text-secondary font-label text-xs uppercase tracking-widest hover:underline underline-offset-4">View All Products &rarr;</a>
+              </div>
+            </div>
+            <!-- Right: Featured images -->
+            <div class="col-span-4 grid grid-cols-4 gap-5">
+              <a href="#" class="group">
+                <div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3">
+                  <img src="../export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/>
+                </div>
+                <h4 class="font-headline text-sm text-on-surface mb-0.5">Star Column Vase</h4>
+                <span class="text-on-surface-variant text-xs">$268</span>
+              </a>
+              <a href="#" class="group">
+                <div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3">
+                  <img src="../export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/>
+                </div>
+                <h4 class="font-headline text-sm text-on-surface mb-0.5">Jade Petal Drops</h4>
+                <span class="text-on-surface-variant text-xs">$88</span>
+              </a>
+              <a href="#" class="group">
+                <div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3">
+                  <img src="../export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/>
+                </div>
+                <h4 class="font-headline text-sm text-on-surface mb-0.5">Volcanic Calm</h4>
+                <span class="text-on-surface-variant text-xs">$64</span>
+              </a>
+              <a href="#" class="group">
+                <div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3">
+                  <img src="../export/陶瓷珠子项链极浅灰底主图.jpg" alt="Earth Pendant" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/>
+                </div>
+                <h4 class="font-headline text-sm text-on-surface mb-0.5">Earth Pendant</h4>
+                <span class="text-on-surface-variant text-xs">$138</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLLECTIONS Mega Trigger -->
+  <div class="mega-trigger">
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide cursor-pointer" href="#">Collections</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-4 gap-6">
+            <!-- 3 Collection Cards -->
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHJv6ufrlrcpphTQiblzn6aCsmr0kCK5i9bmAJ1LGTH7p0gitdDvN50gb-mSxv0BmaS5YXRHiibDBGfc9x_iRMEsMBq5sVQgPw9SIGxb8_envib38oAR5jsUFd1YvLD2tG_ysvfUdt4yekjkgcTmTv-yuTpH-cNpdC8gn98_NpoFjIfAAoMGl_WaVZDs5iAmyJOvxXht8uPRLhbmRP9g2G8I1cIglKkAcHMGwiRerOm-hZiebXjqfEtKC74WlwdmMwtxYy6ZOU5Lc" alt="Tea Room" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Ceremony</span>
+                <h4 class="font-headline text-xl text-white">The Tea Room</h4>
+              </div>
+            </a>
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="Living Sanctuary" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Interior</span>
+                <h4 class="font-headline text-xl text-white">Living Sanctuary</h4>
+              </div>
+            </a>
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="Minimalist Desk" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5">
+                <span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Workspace</span>
+                <h4 class="font-headline text-xl text-white">The Minimalist Desk</h4>
+              </div>
+            </a>
+            <!-- Right: Text CTA -->
+            <div class="flex flex-col justify-center pl-6 border-l border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-4">Spaces That Glow</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Bringing warmth to every corner of your world.</p>
+              <a href="#" class="text-secondary font-label text-xs uppercase tracking-widest hover:underline underline-offset-4">View All Collections &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Center Logo (absolute center) -->
+<a href="#" class="absolute left-1/2 -translate-x-1/2">
+<img alt="LumiClay" class="h-14 w-auto" src="../logo.png"/>
+</a>
+
+<!-- Right Actions -->
+<div class="flex gap-6 items-center ml-auto">
+<div class="hidden md:flex gap-8 mr-4">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Our Story</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Process</a>
+</div>
+<button class="material-symbols-outlined text-secondary scale-95">search</button>
+<button class="material-symbols-outlined text-secondary scale-95">person</button>
+<button class="material-symbols-outlined text-secondary scale-95 relative">
+  shopping_bag
+  <span class="absolute -top-1 -right-1 w-4 h-4 bg-tertiary text-white text-[9px] rounded-full flex items-center justify-center font-label">2</span>
+</button>
+<!-- Mobile hamburger -->
+<button class="md:hidden material-symbols-outlined text-secondary" id="mobileMenuBtn">menu</button>
+</div>
+
+</div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="fixed inset-0 z-[99] bg-surface translate-x-full transition-transform duration-500 flex flex-col pt-24 px-8 pb-8" id="mobileMenu">
+  <button class="absolute top-5 right-6 material-symbols-outlined text-2xl text-on-surface" id="mobileMenuClose">close</button>
+  <div class="space-y-6 flex-1">
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Shop</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Collections</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Our Story</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Process</a>
+  </div>
+  <div class="flex gap-4 pt-8 border-t border-outline-variant/20">
+    <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Instagram</a>
+    <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Pinterest</a>
+  </div>
+</div>
+
+<main class="overflow-x-hidden">
+
+<!-- ═══════════════════════════════════
+     HERO SLIDER
+     ═══════════════════════════════════ -->
+<section class="relative h-screen w-full overflow-hidden" id="heroSlider">
+  <div class="slider-track h-full" id="sliderTrack">
+
+    <!-- Slide 1: Video -->
+    <div class="slide active" data-duration="8000">
+      <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline>
+        <source src="../clay hero.mp4" type="video/mp4"/>
+      </video>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+      <div class="slide-content absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
+        <span class="text-gold font-label text-xs uppercase tracking-[0.3em]">Finding Light Within Clay</span>
+        <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white tracking-tighter leading-none mt-5">
+          From Earth <span class="serif-italic">to Light</span>
+        </h1>
+        <p class="text-white/70 text-base md:text-lg max-w-lg mt-6 leading-relaxed">
+          Every piece is born from silent earth, shaped by patient hands, and transformed through fire into something luminous.
+        </p>
+        <a href="#bestsellers" class="mt-8 inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-label text-xs uppercase tracking-widest hover:bg-white/20 transition-all duration-300">
+          Explore Collection
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Slide 2: Image -->
+    <div class="slide" data-duration="5000">
+      <img class="absolute inset-0 w-full h-full object-cover" src="../蓝色花瓶家居场景图_缩小版.jpg" alt="Blue vase in living room"/>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+      <div class="slide-content absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
+        <span class="text-gold font-label text-xs uppercase tracking-[0.3em]">The Warmth of Hands</span>
+        <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white tracking-tighter leading-none mt-5">
+          Crafted, Never <span class="serif-italic">Copied</span>
+        </h1>
+        <p class="text-white/70 text-base md:text-lg max-w-lg mt-6 leading-relaxed">
+          Machines replicate shapes, but never soul. Every fingerprint left in the clay is a signature of intention.
+        </p>
+        <a href="#" class="mt-8 inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-label text-xs uppercase tracking-widest hover:bg-white/20 transition-all duration-300">
+          Our Process
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Slide 3: Image -->
+    <div class="slide" data-duration="5000">
+      <img class="absolute inset-0 w-full h-full object-cover" src="../黑色花瓶家居场景图_缩小版.jpg" alt="Black vase in living room"/>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60"></div>
+      <div class="slide-content absolute inset-0 z-10 flex flex-col items-center justify-center text-center px-6">
+        <span class="text-gold font-label text-xs uppercase tracking-[0.3em]">Perfectly Imperfect</span>
+        <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl text-white tracking-tighter leading-none mt-5">
+          Beauty in the <span class="serif-italic">Uneven</span>
+        </h1>
+        <p class="text-white/70 text-base md:text-lg max-w-lg mt-6 leading-relaxed">
+          No two pieces are alike. Each ripple and glaze variation is not a flaw — it is the piece breathing.
+        </p>
+        <a href="#bestsellers" class="mt-8 inline-flex items-center gap-3 px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white font-label text-xs uppercase tracking-widest hover:bg-white/20 transition-all duration-300">
+          Shop Now
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slider Controls -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3" id="sliderDots">
+    <button class="slider-dot active" data-i="0"></button>
+    <button class="slider-dot" data-i="1"></button>
+    <button class="slider-dot" data-i="2"></button>
+  </div>
+  <div class="absolute bottom-8 right-8 z-20 hidden md:flex gap-2">
+    <button class="w-11 h-11 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/15 transition-all" id="sPrev"><span class="material-symbols-outlined text-lg">arrow_back</span></button>
+    <button class="w-11 h-11 rounded-full border border-white/30 bg-white/5 backdrop-blur-sm text-white flex items-center justify-center hover:bg-white/15 transition-all" id="sNext"><span class="material-symbols-outlined text-lg">arrow_forward</span></button>
+  </div>
+  <div class="slider-progress" id="sliderProgress"></div>
+</section>
+
+<!-- ═══════════════════════════════════
+     BEST SELLERS (swipeable row)
+     ═══════════════════════════════════ -->
+<section class="py-20 md:py-28" id="bestsellers">
+<div class="max-w-screen-2xl mx-auto px-8">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-baseline mb-8 gap-4">
+    <div>
+      <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">Community Favorites</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface leading-tight">Best Sellers</h2>
+    </div>
+    <a class="fade-in fade-in-d2 text-on-surface-variant border-b border-outline-variant/30 pb-1 hover:text-secondary transition-colors font-label text-sm uppercase tracking-widest" href="#">View All</a>
+  </div>
+
+  <!-- Bubble Tabs -->
+  <div class="flex gap-2 mb-10 overflow-x-auto no-scrollbar pb-1" id="bsTabs">
+    <button class="bubble-tab active px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant whitespace-nowrap" data-filter="all">All</button>
+    <button class="bubble-tab px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant whitespace-nowrap" data-filter="vases">Vases</button>
+    <button class="bubble-tab px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant whitespace-nowrap" data-filter="earrings">Earrings</button>
+    <button class="bubble-tab px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant whitespace-nowrap" data-filter="bracelets">Bracelets</button>
+    <button class="bubble-tab px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant whitespace-nowrap" data-filter="necklaces">Necklaces</button>
+  </div>
+
+  <!-- Swipeable Product Row -->
+  <div class="relative group/scroll">
+    <!-- Left Arrow -->
+    <button class="hidden md:flex absolute -left-4 top-1/3 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-lg shadow-black/8 border border-outline-variant/10 items-center justify-center text-on-surface-variant hover:text-secondary opacity-0 group-hover/scroll:opacity-100 transition-opacity" id="bsPrev">
+      <span class="material-symbols-outlined">arrow_back</span>
+    </button>
+    <!-- Right Arrow -->
+    <button class="hidden md:flex absolute -right-4 top-1/3 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white shadow-lg shadow-black/8 border border-outline-variant/10 items-center justify-center text-on-surface-variant hover:text-secondary opacity-0 group-hover/scroll:opacity-100 transition-opacity" id="bsNext">
+      <span class="material-symbols-outlined">arrow_forward</span>
+    </button>
+
+    <div class="bs-scroll flex gap-6 overflow-x-auto no-scrollbar" id="bsScroll">
+
+      <!-- Product 1 - Vase: 白色星形花瓶 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="vases">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary text-white font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Star Column Vase</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Layered Porcelain</p>
+        <span class="font-label text-sm text-secondary">$268</span>
+      </div>
+
+      <!-- Product 2 - Earrings: 耳环 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="earrings">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">New</span>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Jade Petal Drops</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Marbled Porcelain</p>
+        <span class="font-label text-sm text-secondary">$88</span>
+      </div>
+
+      <!-- Product 3 - Vase: 黑白斑驳陶瓷花瓶 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="vases">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/黑白斑驳陶瓷花瓶极浅灰底主图.jpg" alt="Dune Vessel"/>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Dune Vessel No. 3</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Pit-fired Stoneware</p>
+        <span class="font-label text-sm text-secondary">$320</span>
+      </div>
+
+      <!-- Product 4 - Bracelet: 黑色火山石手链 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="bracelets">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm Bracelet"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary text-white font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Volcanic Calm Bracelet</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Lava Stone & Ceramic</p>
+        <span class="font-label text-sm text-secondary">$64</span>
+      </div>
+
+      <!-- Product 5 - Necklace: 陶瓷珠子项链 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="necklaces">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/陶瓷珠子项链极浅灰底主图.jpg" alt="Heart of Earth Pendant"/>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Heart of Earth Pendant</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Hand-painted Ceramic</p>
+        <span class="font-label text-sm text-secondary">$138</span>
+      </div>
+
+      <!-- Product 6 - Vase: 蓝白花瓶 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="vases">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/蓝白花瓶极浅灰底主图.jpg" alt="Azure Twist Vase"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">New</span>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Azure Twist Vase</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Glazed Porcelain</p>
+        <span class="font-label text-sm text-secondary">$245</span>
+      </div>
+
+      <!-- Product 7 - Vase: 蓝色花瓶 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="vases">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/蓝色花瓶极浅灰底主图.jpg" alt="Coral Bloom Vase"/>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Coral Bloom Vase</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Ribbed Blue Clay</p>
+        <span class="font-label text-sm text-secondary">$195</span>
+      </div>
+
+      <!-- Product 8 - Bracelet: 彩色珠子手链 -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="bracelets">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/彩色珠子手链极浅灰底主图.jpg" alt="Kiln Garden Bracelet"/>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Kiln Garden Bracelet</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Glazed Ceramic Beads</p>
+        <span class="font-label text-sm text-secondary">$86</span>
+      </div>
+
+      <!-- Product 9 - Vase: export.jpg (白色球形花瓶) -->
+      <div class="bs-card group cursor-pointer flex-shrink-0 w-[260px] md:w-[280px]" data-cat="vases">
+        <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="../export/export.jpg" alt="Orb Vase"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary text-white font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+        </div>
+        <h3 class="font-headline text-lg text-on-surface mb-0.5">Orb Vase</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Brushed White Clay</p>
+        <span class="font-label text-sm text-secondary">$195</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ Curated Sanctuaries (3rd section) ═══ -->
+<section class="py-20 md:py-28 px-8 bg-surface-container-low">
+<div class="max-w-screen-2xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="fade-in font-headline text-4xl md:text-5xl text-on-surface">Light Up Every Corner</h2>
+<p class="fade-in fade-in-d1 text-on-surface-variant mt-4 text-sm tracking-wide">Bringing warmth and character to the spaces where life unfolds.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+  <a href="#" class="group block rounded-xl overflow-hidden relative" style="aspect-ratio:3/4">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHJv6ufrlrcpphTQiblzn6aCsmr0kCK5i9bmAJ1LGTH7p0gitdDvN50gb-mSxv0BmaS5YXRHiibDBGfc9x_iRMEsMBq5sVQgPw9SIGxb8_envib38oAR5jsUFd1YvLD2tG_ysvfUdt4yekjkgcTmTv-yuTpH-cNpdC8gn98_NpoFjIfAAoMGl_WaVZDs5iAmyJOvxXht8uPRLhbmRP9g2G8I1cIglKkAcHMGwiRerOm-hZiebXjqfEtKC74WlwdmMwtxYy6ZOU5Lc" alt="The Tea Room"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-7">
+      <h3 class="font-headline text-2xl md:text-3xl text-white leading-tight mb-2">The Tea Room</h3>
+      <p class="text-white/70 text-sm leading-relaxed mb-4 max-w-[240px]">Handcrafted vessels for moments of morning stillness and ritual.</p>
+      <span class="inline-block font-label text-[10px] uppercase tracking-[0.2em] text-white/90 border-b border-white/40 pb-1">Shop Collection</span>
+    </div>
+  </a>
+  <a href="#" class="group block rounded-xl overflow-hidden relative" style="aspect-ratio:3/4">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="The Living Sanctuary"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-7">
+      <h3 class="font-headline text-2xl md:text-3xl text-white leading-tight mb-2">The Living<br/>Sanctuary</h3>
+      <p class="text-white/70 text-sm leading-relaxed mb-4 max-w-[240px]">Sculptural pieces that break the coldness of concrete with earthen warmth.</p>
+      <span class="inline-block font-label text-[10px] uppercase tracking-[0.2em] text-white/90 border-b border-white/40 pb-1">Shop Collection</span>
+    </div>
+  </a>
+  <a href="#" class="group block rounded-xl overflow-hidden relative" style="aspect-ratio:3/4">
+    <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="The Minimalist Desk"/>
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+    <div class="absolute bottom-0 left-0 right-0 p-7">
+      <h3 class="font-headline text-2xl md:text-3xl text-white leading-tight mb-2">The Creative<br/>Desk</h3>
+      <p class="text-white/70 text-sm leading-relaxed mb-4 max-w-[240px]">A small piece on your desk that offers quiet healing when you need it most.</p>
+      <span class="inline-block font-label text-[10px] uppercase tracking-[0.2em] text-white/90 border-b border-white/40 pb-1">Shop Collection</span>
+    </div>
+  </a>
+</div>
+</div>
+</section>
+
+<!-- ═══ Limited Batch Drops ═══ -->
+<section class="py-20 md:py-28 px-8 bg-surface">
+<div class="max-w-screen-2xl mx-auto">
+  <!-- Header with countdown -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-14">
+    <div>
+      <h2 class="fade-in font-headline text-4xl md:text-5xl text-on-surface leading-tight">Limited Batch Drops</h2>
+      <p class="fade-in fade-in-d1 text-on-surface-variant text-sm leading-relaxed mt-4 max-w-md">Hand-shaped and kiln-fired in small batches. Each carries the breath of clay, the memory of flame, and the heartbeat of its maker. Once sold, never restocked.</p>
+    </div>
+    <!-- Countdown -->
+    <div class="flex gap-3" id="countdown">
+      <div class="w-16 h-16 md:w-[72px] md:h-[72px] rounded-xl border border-outline-variant/30 flex flex-col items-center justify-center">
+        <span class="font-headline text-2xl text-on-surface leading-none" id="cdDays">04</span>
+        <span class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-0.5">Days</span>
+      </div>
+      <div class="w-16 h-16 md:w-[72px] md:h-[72px] rounded-xl border border-outline-variant/30 flex flex-col items-center justify-center">
+        <span class="font-headline text-2xl text-on-surface leading-none" id="cdHrs">12</span>
+        <span class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-0.5">Hrs</span>
+      </div>
+      <div class="w-16 h-16 md:w-[72px] md:h-[72px] rounded-xl border border-outline-variant/30 flex flex-col items-center justify-center">
+        <span class="font-headline text-2xl text-on-surface leading-none" id="cdMin">48</span>
+        <span class="font-label text-[9px] uppercase tracking-widest text-on-surface-variant mt-0.5">Min</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Cards — staggered vertical layout -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-start">
+    <!-- Drop 1 — flush top -->
+    <div class="group cursor-pointer">
+      <div class="aspect-[3/4] rounded-xl overflow-hidden bg-surface-container-low relative mb-5">
+        <img class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" loading="lazy" src="../耳环暗色场景图.jpg" alt="Jade Petal Earrings"/>
+        <span class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-sm font-label text-[10px] uppercase tracking-wider text-on-surface border border-outline-variant/20">12 Pieces Only</span>
+      </div>
+      <h3 class="font-headline text-xl text-on-surface mb-1">Jade Petal Earrings</h3>
+      <p class="text-on-surface-variant text-sm serif-italic mb-3">Releasing Sept 24th</p>
+      <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors border-b border-on-surface/20 pb-0.5">Notify Me</a>
+    </div>
+    <!-- Drop 2 — pushed down -->
+    <div class="group cursor-pointer md:mt-24">
+      <div class="aspect-[3/4] rounded-xl overflow-hidden bg-surface-container-low relative mb-5">
+        <img class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" loading="lazy" src="../白色星形花瓶暗色场景图.jpg" alt="Star Column Vase"/>
+        <span class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-sm font-label text-[10px] uppercase tracking-wider text-on-surface border border-outline-variant/20">Limited Edition</span>
+      </div>
+      <h3 class="font-headline text-xl text-on-surface mb-1">Star Column Vase</h3>
+      <p class="text-on-surface-variant text-sm serif-italic mb-3">Releasing Sept 24th</p>
+      <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors border-b border-on-surface/20 pb-0.5">Notify Me</a>
+    </div>
+    <!-- Drop 3 — slight offset -->
+    <div class="group cursor-pointer md:mt-10">
+      <div class="aspect-[3/4] rounded-xl overflow-hidden bg-surface-container-low relative mb-5">
+        <img class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700" loading="lazy" src="../黑色火山石手链暗色场景图.jpg" alt="Volcanic Calm Bracelet"/>
+        <span class="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-surface/90 backdrop-blur-sm font-label text-[10px] uppercase tracking-wider text-on-surface border border-outline-variant/20">New Batch</span>
+      </div>
+      <h3 class="font-headline text-xl text-on-surface mb-1">Volcanic Calm Bracelet</h3>
+      <p class="text-on-surface-variant text-sm serif-italic mb-3">Releasing Sept 24th</p>
+      <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface hover:text-secondary transition-colors border-b border-on-surface/20 pb-0.5">Notify Me</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ═══ Founder's Vision ═══ -->
+<section class="py-20 md:py-28 px-8 bg-surface-container-low">
+<div class="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
+<div class="relative">
+<div class="aspect-[3/4] rounded-xl overflow-hidden bg-surface-dim">
+<img class="w-full h-full object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="Artisan potter"/>
+</div>
+<div class="absolute -bottom-8 -right-8 bg-secondary-container p-12 rounded-lg hidden lg:block">
+<span class="material-symbols-outlined text-4xl text-on-secondary-container">format_quote</span>
+</div>
+</div>
+<div class="space-y-10">
+<span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] block">Our Story</span>
+<h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface leading-tight italic">When Earth <br/>Meets Light</h2>
+<div class="fade-in fade-in-d2 space-y-6 text-on-surface-variant body-lg leading-relaxed max-w-lg">
+<p>In a world pressed on fast-forward, our studio is where time slows down. LumiClay was born from a simple wish: to find the light hidden within clay.</p>
+<p>"Lumi" means light. "Clay" means earth. The beauty of ceramics lies in its transformation — from silent, humble soil into something luminous through the alchemy of fire. This journey from darkness to glow is the philosophy we live by.</p>
+</div>
+<div class="fade-in fade-in-d3 pt-8">
+<p class="font-headline text-3xl text-secondary serif-italic">The LumiClay Studio</p>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mt-2">Handmade With Intention</p>
+</div>
+<a href="#" class="fade-in fade-in-d4 inline-flex items-center gap-2 mt-6 px-8 py-3.5 bg-secondary text-on-secondary rounded-full font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors">
+  Learn More
+  <span class="material-symbols-outlined text-base">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+
+<!-- ═══ Voices ═══ -->
+<section class="py-20 md:py-28 bg-kiln">
+<div class="max-w-screen-xl mx-auto px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+<div class="space-y-12">
+<div class="fade-in border-l-2 border-white/15 pl-8">
+<p class="font-headline text-2xl text-white/90 italic leading-relaxed mb-6">"You can feel the warmth of hands in every piece. The small imperfections make it feel alive — like it's breathing."</p>
+<span class="font-label text-xs uppercase tracking-widest text-gold">— Sarah J., Interior Architect</span>
+</div>
+<div class="fade-in fade-in-d2 border-l-2 border-white/15 pl-8">
+<p class="font-headline text-2xl text-white/90 italic leading-relaxed mb-6">"Wearing LumiClay jewelry is like carrying a tiny sculpture. It catches the light differently every time I move."</p>
+<span class="font-label text-xs uppercase tracking-widest text-gold">— Michael Chen, Collector</span>
+</div>
+</div>
+<div class="fade-in fade-in-d3 flex items-center justify-center">
+<div class="relative p-12 border border-white/10 rounded-full aspect-square flex flex-col items-center justify-center text-center max-w-sm">
+<span class="material-symbols-outlined text-5xl mb-6 text-gold">star</span>
+<h3 class="font-headline text-3xl text-white mb-4">4.9/5</h3>
+<p class="text-white/50 body-sm px-6">Rated by over 2,000 artisans and home-makers across the globe.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ═══ TikTok Gallery ═══ -->
+<section class="py-20 md:py-28 overflow-hidden bg-surface">
+<div class="px-8 max-w-screen-2xl mx-auto mb-16 flex justify-between items-end">
+<div>
+<h2 class="fade-in font-headline text-3xl">In Your Hands</h2>
+<p class="fade-in fade-in-d1 text-on-surface-variant body-sm mt-2">Every piece finds its own light. Shared by our community #LumiClay</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-secondary/5 transition-colors" id="ugcPrev"><span class="material-symbols-outlined">arrow_back</span></button>
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-secondary/5 transition-colors" id="ugcNext"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<div class="flex gap-6 overflow-x-auto px-8 no-scrollbar pb-8" id="ugcScroll">
+<div class="min-w-[300px] h-[500px] relative rounded-xl overflow-hidden flex-shrink-0 group">
+<img class="w-full h-full object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsk_B6hpUK34RHg53k07kF_hKW-SFiKPP9Z6hiAG2k17YVr4KDeaLe0T0TSHIAV7_sWP3O5Ed-VEAMcpfJZLwcBbXmW6CNNvWjloTMIwFp_8NJX3XfY8N3TX_6rlI7A9XTT50Qqb8_aYRoAzV_0hGc3dIUrpdZWxJP31IvJRgKWcmCNPVmxpPhCou8FmzBj1qTXXSiaXE_rQH7kKC2VRRk8Jch2carFclUX97-XVDC-NbZ6y74LPjMx6-pnG8m3iQRcT4PvJO1cXk" alt="Unboxing"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center"><span class="material-symbols-outlined text-white text-6xl opacity-80 group-hover:scale-110 transition-transform">play_circle</span></div>
+</div>
+<div class="min-w-[300px] h-[500px] relative rounded-xl overflow-hidden flex-shrink-0 group">
+<img class="w-full h-full object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBvCZkQ0mAVBknqYGBjdQOCedqRYLzln5FDE57RgRN6gTVYTe4cUtUpeZj2OAucSvDRFAR9TdekmAwRD141NiiK65_5tTTQ24OGV3vNDJCnpjetGo-CHSb9SV1nw9RNe4FzLjdopBBkMc2Nko2HotbHdvHRdkgMkvfGHCnemu4DSqAP3E86nBv5Qh-tcEADUTJvs3xC2g1sn3Zo8eDyPKaCUsF5EaPjUO9VhHSjKZ1FagyzDHQvKGi02rr8uscBNE22u4xlGMG2-8" alt="Tea pouring"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center"><span class="material-symbols-outlined text-white text-6xl opacity-80 group-hover:scale-110 transition-transform">play_circle</span></div>
+</div>
+<div class="min-w-[300px] h-[500px] relative rounded-xl overflow-hidden flex-shrink-0 group">
+<img class="w-full h-full object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz8TbyKY9gPrxUp_baYVGHyRtZgRAf_-T39ORQIye25_Yn_-VBkVhEG_2y6eBJ3xpK2zGPk2CPhVn6dl-uySJPSkl7hfBjnldMlQk_HNl0P5SaK9k2mQNZ7Ra5RuGG4YmwyJhWDK4w4wNtd0spyqBXgTfT-VUlGd_ZwhYwSS5P93c5-LLNH4w6xucrATQRC-cZuvPr0Wvr1LX6z8JnFYDnJjJwDT7QT0prtG3Mi0SKS3swuYxz5FtwEgAo8nKokyRyEYZfjNGckik" alt="Styling earrings"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center"><span class="material-symbols-outlined text-white text-6xl opacity-80 group-hover:scale-110 transition-transform">play_circle</span></div>
+</div>
+<div class="min-w-[300px] h-[500px] relative rounded-xl overflow-hidden flex-shrink-0 group">
+<img class="w-full h-full object-cover" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwESRoogY3spcRS148ltn5S23f2r1R3vqkDaPcPfKkdcjeUHyLNvlIl_jk9PxZ-DDrGwiS-dZh5KAuXCf7P_T17jFFre7EaRKfS3GiALpxRNgLPTXmz2POahYeO5gydNQEQsWCEaRFA06OTvVaK1ljDaHuK-uOs4hlYFg0l15OUQGYqni6vt8v1Ic2FOI-EyHh0vDh08GjOVIREAWeCDag8j6GvfMFwkQaeF5ka5dd634dUT--v4gQWsH9SsNjarjBVKMT069kJOM" alt="Clay texture"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center"><span class="material-symbols-outlined text-white text-6xl opacity-80 group-hover:scale-110 transition-transform">play_circle</span></div>
+</div>
+</div>
+</section>
+
+<!-- ═══ Newsletter ═══ -->
+<section class="relative overflow-hidden bg-kiln">
+  <!-- Background texture -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image:url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"></div>
+  <!-- Decorative circle -->
+  <div class="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full" style="background:radial-gradient(circle,rgba(201,169,110,0.12) 0%,transparent 70%)"></div>
+  <div class="absolute -bottom-20 -left-20 w-[300px] h-[300px] rounded-full" style="background:radial-gradient(circle,rgba(181,112,79,0.1) 0%,transparent 70%)"></div>
+
+  <div class="relative z-10 max-w-screen-xl mx-auto px-8 py-20 md:py-28">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+      <!-- Left: Text content -->
+      <div>
+        <span class="fade-in font-label text-xs uppercase tracking-[0.3em] mb-5 block text-gold">The Studio Journal</span>
+        <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl lg:text-6xl text-white/95 leading-[1.08] mb-6">Let Every Piece of Clay<br/><span class="serif-italic">Find Its Light</span></h2>
+        <p class="fade-in fade-in-d2 text-white/50 text-sm md:text-base leading-relaxed max-w-md">Behind-the-scenes from the kiln, early access to new drops, and reflections on finding beauty in the everyday. Once a month — no noise, only warmth.</p>
+      </div>
+      <!-- Right: Form card -->
+      <div class="relative">
+        <div class="rounded-xl p-8 md:p-10" style="background:rgba(255,255,255,0.05); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.08)">
+          <h3 class="font-headline text-2xl text-white/90 mb-2">Stay in the Glow</h3>
+          <p class="text-white/40 text-sm mb-8">Join 4,200+ collectors who believe in the beauty of imperfection.</p>
+          <form onsubmit="return false" class="space-y-4">
+            <input class="w-full bg-white/[0.07] border border-white/10 rounded-xl px-5 py-4 text-white text-sm placeholder:text-white/30 focus:border-white/25 focus:ring-0 focus:outline-none transition-colors" placeholder="Your name" type="text"/>
+            <input class="w-full bg-white/[0.07] border border-white/10 rounded-xl px-5 py-4 text-white text-sm placeholder:text-white/30 focus:border-white/25 focus:ring-0 focus:outline-none transition-colors" placeholder="Your email address" type="email"/>
+            <button class="w-full py-4 rounded-xl font-label text-xs uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110 mt-2" style="background:linear-gradient(135deg,#5C3D2E,#A0674A)">
+              Join the Studio
+            </button>
+          </form>
+          <p class="text-white/25 text-[11px] mt-5 text-center">Unsubscribe anytime. We respect your inbox.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Policy ═══ -->
+<section class="py-14 md:py-20 bg-surface border-t border-outline-variant/10">
+<div class="max-w-screen-2xl mx-auto px-8 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+<div class="flex items-center gap-5"><span class="material-symbols-outlined text-2xl text-secondary">public</span><div><h4 class="font-headline text-sm">Worldwide Delivery</h4><p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">Carefully packed, shipped with care.</p></div></div>
+<div class="flex items-center gap-5"><span class="material-symbols-outlined text-2xl text-secondary">verified</span><div><h4 class="font-headline text-sm">Artisan Guarantee</h4><p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">Handmade quality, always.</p></div></div>
+<div class="flex items-center gap-5"><span class="material-symbols-outlined text-2xl text-secondary">eco</span><div><h4 class="font-headline text-sm">Earth-Friendly</h4><p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">100% plastic-free packaging.</p></div></div>
+<div class="flex items-center gap-5"><span class="material-symbols-outlined text-2xl text-secondary">handshake</span><div><h4 class="font-headline text-sm">Made by Hand</h4><p class="text-on-surface-variant text-[10px] uppercase tracking-widest mt-1">Every piece, one of a kind.</p></div></div>
+</div>
+</section>
+</main>
+
+<!-- ═══ Footer (unchanged) ═══ -->
+<footer class="bg-surface-container-low pt-20 pb-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="col-span-1"><img src="../logo.png" alt="LumiClay" class="h-8 w-auto mb-4"/><p class="text-on-surface-variant/80 font-body body-sm leading-relaxed max-w-xs">Finding the light within clay. Every imperfection is a breath, every piece a story.</p></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Explore</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shop All</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Collections</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Care Guide</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Wholesale</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Support</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shipping &amp; Returns</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Privacy Policy</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Contact Us</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Connect</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Instagram</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Pinterest</a></li></ul></div>
+</div>
+<div class="px-12 pt-10 border-t border-outline-variant/10 text-center">
+<p class="text-on-surface-variant/80 font-body text-[10px] tracking-widest uppercase">© 2025 LumiClay. From earth to light, one piece at a time.</p>
+</div>
+</footer>
+
+<!-- ═══════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════ -->
+<script>
+/* ── Hero Slider ── */
+(function(){
+  const track = document.getElementById('sliderTrack');
+  const slides = track.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  const progress = document.getElementById('sliderProgress');
+  let cur = 0, timer = null;
+  const total = slides.length;
+
+  function go(i){
+    slides[cur].classList.remove('active');
+    cur = ((i % total) + total) % total;
+    track.style.transform = `translateX(-${cur*100}%)`;
+    slides[cur].classList.add('active');
+    dots.forEach((d,idx) => d.classList.toggle('active', idx===cur));
+    startAuto();
+  }
+
+  function startAuto(){
+    clearTimeout(timer);
+    const dur = parseInt(slides[cur].dataset.duration)||5000;
+    progress.style.transition='none'; progress.style.width='0%';
+    void progress.offsetHeight;
+    progress.style.transition=`width ${dur}ms linear`; progress.style.width='100%';
+    timer = setTimeout(()=>go(cur+1), dur);
+  }
+
+  document.getElementById('sNext').addEventListener('click',()=>go(cur+1));
+  document.getElementById('sPrev').addEventListener('click',()=>go(cur-1));
+  dots.forEach(d=>d.addEventListener('click',()=>go(+d.dataset.i)));
+
+  // Touch swipe
+  let tx=0;
+  track.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+  track.addEventListener('touchend',e=>{const d=tx-e.changedTouches[0].clientX; if(Math.abs(d)>50){d>0?go(cur+1):go(cur-1)}});
+
+  // Pause on hover
+  const sl = document.getElementById('heroSlider');
+  sl.addEventListener('mouseenter',()=>{clearTimeout(timer);progress.style.transition='none'});
+  sl.addEventListener('mouseleave',startAuto);
+
+  startAuto();
+})();
+
+/* ── Best Seller Tabs ── */
+(function(){
+  const tabs = document.querySelectorAll('#bsTabs .bubble-tab');
+  const cards = document.querySelectorAll('.bs-card');
+  const scroll = document.getElementById('bsScroll');
+
+  tabs.forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      tabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      const f = tab.dataset.filter;
+
+      cards.forEach(c=>{
+        if(f==='all' || c.dataset.cat===f){
+          c.style.display='';
+        } else {
+          c.style.display='none';
+        }
+      });
+
+      // Reset scroll position
+      scroll.scrollTo({left:0, behavior:'smooth'});
+    });
+  });
+
+  // Arrow scroll
+  const scrollAmt = 300;
+  document.getElementById('bsPrev').addEventListener('click',()=>{
+    scroll.scrollBy({left:-scrollAmt, behavior:'smooth'});
+  });
+  document.getElementById('bsNext').addEventListener('click',()=>{
+    scroll.scrollBy({left:scrollAmt, behavior:'smooth'});
+  });
+})();
+
+/* ── Scroll Fade In (Intersection Observer) ── */
+(function(){
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+})();
+
+/* ── In Your Hands gallery scroll ── */
+(function(){
+  const scroll = document.getElementById('ugcScroll');
+  const prev = document.getElementById('ugcPrev');
+  const next = document.getElementById('ugcNext');
+  if (!scroll || !prev || !next) return;
+  const amt = 320;
+  prev.addEventListener('click', () => scroll.scrollBy({ left: -amt, behavior: 'smooth' }));
+  next.addEventListener('click', () => scroll.scrollBy({ left: amt, behavior: 'smooth' }));
+})();
+
+/* ── Mobile Menu ── */
+(function(){
+  const menu = document.getElementById('mobileMenu');
+  document.getElementById('mobileMenuBtn').addEventListener('click',()=>{
+    menu.classList.remove('translate-x-full');
+  });
+  document.getElementById('mobileMenuClose').addEventListener('click',()=>{
+    menu.classList.add('translate-x-full');
+  });
+})();
+
+/* ── Countdown Timer ── */
+(function(){
+  // Set target to 4 days, 12 hrs, 48 min from now
+  const target = Date.now() + (4*86400000 + 12*3600000 + 48*60000);
+  function tick(){
+    const diff = Math.max(0, target - Date.now());
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    document.getElementById('cdDays').textContent = String(d).padStart(2,'0');
+    document.getElementById('cdHrs').textContent = String(h).padStart(2,'0');
+    document.getElementById('cdMin').textContent = String(m).padStart(2,'0');
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+
+/* ── Mega Menu (JS hover with delay) ── */
+(function(){
+  const triggers = document.querySelectorAll('.mega-trigger');
+  const nav = document.getElementById('mainNav');
+  let closeTimer = null;
+
+  triggers.forEach(trigger => {
+    const panel = trigger.querySelector('.mega-panel');
+    if (!panel) return;
+
+    function open() {
+      clearTimeout(closeTimer);
+      // Close all other panels first
+      document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open'));
+      // Position panel right below nav
+      panel.style.top = nav.offsetHeight + 'px';
+      panel.classList.add('open');
+    }
+
+    function scheduleClose() {
+      closeTimer = setTimeout(() => {
+        panel.classList.remove('open');
+      }, 200); // 200ms grace period
+    }
+
+    // Trigger: mouse enter/leave
+    trigger.addEventListener('mouseenter', open);
+    trigger.addEventListener('mouseleave', scheduleClose);
+
+    // Panel: mouse enter/leave (keeps it alive)
+    panel.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+    });
+    panel.addEventListener('mouseleave', scheduleClose);
+  });
+
+  // Close on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open'));
+  }, { passive: true });
+})();
+
+/* ── Nav: transparent on hero, hide on scroll down, show on scroll up ── */
+(function(){
+  const nav = document.getElementById('mainNav');
+  const hero = document.getElementById('heroSlider');
+  const heroH = hero ? hero.offsetHeight : 600;
+  let lastY = 0;
+
+  // Nav link colors for hero (white) vs scrolled (dark)
+  const navLinks = nav.querySelectorAll('.nav-links a, .nav-actions button, .nav-logo span');
+
+  function update() {
+    const y = window.scrollY;
+    const inHero = y < heroH - 80;
+
+    // Transparent vs solid background
+    if (inHero) {
+      nav.style.background = 'transparent';
+      nav.style.backdropFilter = 'none';
+      nav.style.boxShadow = 'none';
+      nav.classList.add('nav-hero');
+    } else {
+      nav.style.background = 'rgba(250,248,244,0.92)';
+      nav.style.backdropFilter = 'blur(20px) saturate(1.2)';
+      nav.style.boxShadow = '0 1px 0 rgba(0,0,0,0.04)';
+      nav.classList.remove('nav-hero');
+    }
+
+    // Hide on scroll down, show on scroll up (only after hero)
+    if (!inHero) {
+      if (y > lastY && y - lastY > 5) {
+        nav.style.transform = 'translateY(-100%)';
+      } else if (lastY > y && lastY - y > 5) {
+        nav.style.transform = 'translateY(0)';
+      }
+    } else {
+      nav.style.transform = 'translateY(0)';
+    }
+
+    lastY = y;
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+</body></html>
