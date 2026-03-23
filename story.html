@@ -90,6 +90,77 @@ tailwind.config = {
   will-change: transform;
 }
 
+/* ── Scroll Story ── */
+.scroll-story-outer {
+  height: 400vh; /* 3 steps × ~133vh each for scroll room */
+  position: relative;
+}
+.scroll-story-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.story-slide {
+  position: absolute; inset: 0;
+  display: flex; align-items: center;
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.story-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.story-slide .story-img {
+  transform: scale(1.08);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s ease;
+}
+.story-slide.active .story-img {
+  transform: scale(1);
+}
+.story-slide .story-text > * {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.story-slide.active .story-text > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay:0.15s; }
+.story-slide.active .story-text > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay:0.3s; }
+.story-slide.active .story-text > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay:0.45s; }
+.story-slide.active .story-text > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay:0.6s; }
+
+/* Progress dots */
+.story-dots {
+  position: absolute; right: 2rem; top: 50%;
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 12px;
+  z-index: 10;
+}
+.story-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 2px solid rgba(92,61,46,0.3);
+  background: transparent;
+  transition: all 0.4s;
+  cursor: pointer;
+}
+.story-dot.active {
+  background: #5C3D2E; border-color: #5C3D2E;
+  box-shadow: 0 0 0 4px rgba(92,61,46,0.12);
+}
+/* On dark slides */
+.scroll-story-sticky[data-theme="dark"] .story-dot {
+  border-color: rgba(255,255,255,0.3);
+}
+.scroll-story-sticky[data-theme="dark"] .story-dot.active {
+  background: #c9a96e; border-color: #c9a96e;
+  box-shadow: 0 0 0 4px rgba(201,169,110,0.2);
+}
+
+@media (max-width: 768px) {
+  .scroll-story-outer { height: 300vh; }
+  .story-dots { right: 1rem; gap: 10px; }
+  .story-dot { width: 8px; height: 8px; }
+}
+
 /* ── Counter animation ── */
 .counter-num {
   font-variant-numeric: tabular-nums;
@@ -267,80 +338,91 @@ tailwind.config = {
 </section>
 
 <!-- ═══════════════════════════════════
-     ORIGIN STORY — Alternating sections
+     ORIGIN STORY — Scroll-driven sticky
      ═══════════════════════════════════ -->
+<div class="scroll-story-outer" id="scrollStory">
+  <div class="scroll-story-sticky">
 
-<!-- Origin 1: The Beginning -->
-<section class="py-24 md:py-36 bg-surface overflow-hidden">
-  <div class="max-w-screen-2xl mx-auto px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-      <div class="slide-left relative">
-        <div class="aspect-[4/5] rounded-xl overflow-hidden">
-          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="Potter at the wheel" loading="lazy"/>
-        </div>
-        <!-- Floating accent -->
-        <div class="absolute -bottom-6 -right-6 bg-secondary-container p-8 rounded-lg hidden md:flex items-center gap-4">
-          <span class="material-symbols-outlined text-3xl text-on-secondary-container">format_quote</span>
-          <p class="font-headline text-sm italic text-on-secondary-container max-w-[180px]">"Clay remembers every touch."</p>
-        </div>
-      </div>
-      <div class="slide-right space-y-8">
-        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Beginning</span>
-        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Born from a<br/><span class="serif-italic">Simple Wish</span></h2>
-        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
-          <p>In a world pressed on fast-forward, LumiClay was born from a desire to slow down. It started in a small garage studio in 2019 — just a wheel, a bag of clay, and the belief that something beautiful could emerge from silence.</p>
-          <p>The founder spent months learning to center clay — a meditative act that requires presence, patience, and the willingness to start over. That philosophy became the heartbeat of everything we make.</p>
+    <!-- Progress dots -->
+    <div class="story-dots" id="storyDots">
+      <button class="story-dot active" data-slide="0"></button>
+      <button class="story-dot" data-slide="1"></button>
+      <button class="story-dot" data-slide="2"></button>
+    </div>
+
+    <!-- Slide 1: The Beginning (light) -->
+    <div class="story-slide active bg-surface" data-bg="light">
+      <div class="max-w-screen-2xl mx-auto px-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="relative">
+            <div class="aspect-[4/5] rounded-xl overflow-hidden">
+              <img class="story-img w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="Potter at the wheel" loading="lazy"/>
+            </div>
+            <div class="absolute -bottom-6 -right-6 bg-secondary-container p-6 rounded-lg hidden md:flex items-center gap-3 shadow-xl shadow-black/5">
+              <span class="material-symbols-outlined text-2xl text-on-secondary-container">format_quote</span>
+              <p class="font-headline text-sm italic text-on-secondary-container max-w-[160px]">"Clay remembers every touch."</p>
+            </div>
+          </div>
+          <div class="story-text space-y-7 py-8">
+            <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Beginning</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Born from a<br/><span class="serif-italic">Simple Wish</span></h2>
+            <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
+              <p>In a world pressed on fast-forward, LumiClay was born from a desire to slow down. It started in a small garage studio in 2019 — just a wheel, a bag of clay, and the belief that something beautiful could emerge from silence.</p>
+              <p>The founder spent months learning to center clay — a meditative act that requires presence, patience, and the willingness to start over. That philosophy became the heartbeat of everything we make.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Origin 2: The Philosophy (reversed) -->
-<section class="py-24 md:py-36 bg-surface-container-low overflow-hidden">
-  <div class="max-w-screen-2xl mx-auto px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-      <div class="slide-left space-y-8 md:order-1 order-2">
-        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Philosophy</span>
-        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Light Within<br/><span class="serif-italic">the Darkness</span></h2>
-        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
-          <p>"Lumi" means light. "Clay" means earth. The beauty of ceramics lies in its transformation — from silent, humble soil into something luminous through the alchemy of fire.</p>
-          <p>We believe every piece of clay carries potential light within it. Our role is simply to coax that light out — through careful hands, patient glazing, and the ancient fire of the kiln. What emerges is never quite what we planned. It's always better.</p>
-        </div>
-      </div>
-      <div class="slide-right relative md:order-2 order-1">
-        <div class="aspect-[4/5] rounded-xl overflow-hidden">
-          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="Light through ceramics" loading="lazy"/>
+    <!-- Slide 2: The Philosophy (dark) -->
+    <div class="story-slide bg-kiln" data-bg="dark">
+      <div class="max-w-screen-2xl mx-auto px-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="relative md:order-2">
+            <div class="aspect-[4/5] rounded-xl overflow-hidden">
+              <img class="story-img w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="Light through ceramics" loading="lazy"/>
+            </div>
+          </div>
+          <div class="story-text space-y-7 py-8 md:order-1">
+            <span class="text-gold font-label text-xs uppercase tracking-[0.3em] block">The Philosophy</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-white/95 leading-[1.1]">Light Within<br/><span class="serif-italic">the Darkness</span></h2>
+            <div class="space-y-5 text-white/55 text-base leading-relaxed max-w-md">
+              <p>"Lumi" means light. "Clay" means earth. The beauty of ceramics lies in its transformation — from silent, humble soil into something luminous through the alchemy of fire.</p>
+              <p>We believe every piece of clay carries potential light within it. Our role is simply to coax that light out — through careful hands, patient glazing, and the ancient fire of the kiln. What emerges is never quite what we planned. It's always better.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Origin 3: The Mission -->
-<section class="py-24 md:py-36 bg-surface overflow-hidden">
-  <div class="max-w-screen-2xl mx-auto px-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
-      <div class="slide-left relative">
-        <div class="aspect-[4/5] rounded-xl overflow-hidden">
-          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="Studio workspace" loading="lazy"/>
+    <!-- Slide 3: The Mission (light) -->
+    <div class="story-slide bg-surface" data-bg="light">
+      <div class="max-w-screen-2xl mx-auto px-8 w-full">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div class="relative">
+            <div class="aspect-[4/5] rounded-xl overflow-hidden">
+              <img class="story-img w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="Studio workspace" loading="lazy"/>
+            </div>
+          </div>
+          <div class="story-text space-y-7 py-8">
+            <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Mission</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Slow Craft for a<br/><span class="serif-italic">Fast World</span></h2>
+            <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
+              <p>In an age of mass production, we choose to make less, but make it mean more. Every piece takes between 3 to 6 weeks from raw clay to finished object — and we wouldn't have it any other way.</p>
+              <p>Our mission is simple: to place something handmade, imperfect, and full of intention into the hands of people who value presence over perfection. A cup that makes your morning tea a ritual. A vase that makes silence visible.</p>
+            </div>
+            <a href="collection.html" class="inline-flex items-center gap-3 px-8 py-4 bg-secondary text-on-secondary rounded-full font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors">
+              Explore Our Work
+              <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+          </div>
         </div>
-      </div>
-      <div class="slide-right space-y-8">
-        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Mission</span>
-        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Slow Craft for a<br/><span class="serif-italic">Fast World</span></h2>
-        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
-          <p>In an age of mass production, we choose to make less, but make it mean more. Every piece takes between 3 to 6 weeks from raw clay to finished object — and we wouldn't have it any other way.</p>
-          <p>Our mission is simple: to place something handmade, imperfect, and full of intention into the hands of people who value presence over perfection. A cup that makes your morning tea a ritual. A vase that makes silence visible.</p>
-        </div>
-        <a href="collection.html" class="inline-flex items-center gap-3 px-8 py-4 bg-secondary text-on-secondary rounded-full font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors">
-          Explore Our Work
-          <span class="material-symbols-outlined text-base">arrow_forward</span>
-        </a>
       </div>
     </div>
+
   </div>
-</section>
+</div>
 
 <!-- ═══════════════════════════════════
      NUMBERS THAT SPEAK — Counter
@@ -660,6 +742,47 @@ tailwind.config = {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
   document.querySelectorAll('.fade-in, .slide-left, .slide-right').forEach(el => animObs.observe(el));
+
+  /* ── Scroll Story (sticky scroll-driven) ── */
+  const storyOuter = document.getElementById('scrollStory');
+  const storySlides = storyOuter.querySelectorAll('.story-slide');
+  const storyDots = storyOuter.querySelectorAll('.story-dot');
+  const stickyEl = storyOuter.querySelector('.scroll-story-sticky');
+  const totalSlides = storySlides.length;
+
+  function updateScrollStory() {
+    const rect = storyOuter.getBoundingClientRect();
+    const outerH = storyOuter.offsetHeight;
+    const scrolled = -rect.top; // how far we've scrolled into the section
+    const scrollRange = outerH - window.innerHeight; // total scrollable distance
+    const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
+    const activeIndex = Math.min(totalSlides - 1, Math.floor(progress * totalSlides));
+
+    storySlides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === activeIndex);
+    });
+    storyDots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === activeIndex);
+    });
+
+    // Update dot theme based on active slide background
+    const activeBg = storySlides[activeIndex]?.dataset.bg || 'light';
+    stickyEl.dataset.theme = activeBg;
+  }
+
+  window.addEventListener('scroll', updateScrollStory, { passive: true });
+  updateScrollStory();
+
+  // Dot click → scroll to corresponding slide position
+  storyDots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.slide);
+      const outerTop = storyOuter.offsetTop;
+      const scrollRange = storyOuter.offsetHeight - window.innerHeight;
+      const targetScroll = outerTop + (idx / totalSlides) * scrollRange + 10;
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    });
+  });
 
   /* ── Counter animation ── */
   const counterObs = new IntersectionObserver((entries) => {
