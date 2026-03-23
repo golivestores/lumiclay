@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Our Story | LumiClay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-primary":"#faf7f7","surface-container-high":"#e5eae0","outline":"#767c74",
+        "on-primary-container":"#525252","tertiary-container":"#eeb496",
+        "surface":"#fafaf5","surface-container-highest":"#dee4da","background":"#fafaf5",
+        "surface-container-low":"#f3f4ee","on-tertiary-container":"#59331d",
+        "inverse-surface":"#0d0f0c","on-tertiary":"#fff7f5","surface-bright":"#fafaf5",
+        "surface-dim":"#d5dcd0","secondary-fixed":"#f4e0be","on-secondary-container":"#5e5036",
+        "secondary":"#5C3D2E","primary":"#5f5e5e","tertiary":"#A0674A",
+        "surface-variant":"#dee4da","primary-container":"#e4e2e1",
+        "on-background":"#2e342d","secondary-container":"#f4e0be",
+        "on-surface-variant":"#5b6159","on-secondary":"#fff8f1","primary-dim":"#525252",
+        "on-surface":"#2e342d","outline-variant":"#aeb4aa",
+        "surface-container-lowest":"#ffffff","surface-container":"#ecefe7",
+        "secondary-dim":"#4A2E22","secondary-fixed-dim":"#e6d2b0",
+        "gold":"#c9a96e","kiln":"#2c2820",
+      },
+      fontFamily: { "headline":["Noto Serif"], "body":["Manrope"], "label":["Manrope"] },
+      borderRadius: {"DEFAULT":"0.25rem","lg":"0.75rem","xl":"1rem","full":"9999px"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  display: inline-block; line-height: 1;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+
+/* ── Scroll Fade In ── */
+.fade-in {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in-d1 { transition-delay: 0.12s; }
+.fade-in-d2 { transition-delay: 0.24s; }
+.fade-in-d3 { transition-delay: 0.36s; }
+.fade-in-d4 { transition-delay: 0.48s; }
+.fade-in-d5 { transition-delay: 0.6s; }
+
+/* ── Slide from left / right ── */
+.slide-left {
+  opacity: 0; transform: translateX(-60px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide-right {
+  opacity: 0; transform: translateX(60px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide-left.visible, .slide-right.visible {
+  opacity: 1; transform: translateX(0);
+}
+
+/* ── Mega Menu ── */
+.mega-panel {
+  position: fixed; top: auto; left: 0; right: 0; width: 100%;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s; z-index: 200;
+}
+.mega-panel.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* ── Hero ── */
+.hero-scroll-arrow {
+  animation: bounce-down 2s infinite;
+}
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* ── Parallax images ── */
+.parallax-img {
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+/* ── Counter animation ── */
+.counter-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Values cards drag scroll ── */
+.values-scroll {
+  cursor: grab;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.values-scroll:active { cursor: grabbing; }
+.values-scroll > * { scroll-snap-align: start; }
+
+/* ── Masonry ── */
+.masonry {
+  columns: 3;
+  column-gap: 1rem;
+}
+.masonry > * {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+@media (max-width: 768px) {
+  .masonry { columns: 2; }
+}
+@media (max-width: 480px) {
+  .masonry { columns: 1; }
+}
+
+/* ── Lightbox ── */
+.lightbox {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.92);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.4s;
+}
+.lightbox.open { opacity: 1; pointer-events: auto; }
+.lightbox img {
+  max-width: 90vw; max-height: 85vh;
+  border-radius: 0.75rem;
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lightbox.open img { transform: scale(1); }
+
+/* ── Timeline ── */
+.timeline-line {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 2px; background: #dee4da;
+  transform: translateX(-50%);
+}
+.timeline-line-fill {
+  position: absolute; left: 50%; top: 0;
+  width: 2px; height: 0;
+  background: linear-gradient(180deg, #5C3D2E, #c9a96e);
+  transform: translateX(-50%);
+  transition: height 0.05s linear;
+}
+.timeline-node {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 3px solid #dee4da; background: #fafaf5;
+  transition: all 0.5s;
+  z-index: 2;
+}
+.timeline-node.active {
+  border-color: #5C3D2E; background: #5C3D2E;
+  box-shadow: 0 0 0 6px rgba(92,61,46,0.15);
+}
+.timeline-item {
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.timeline-item.active { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  .timeline-line, .timeline-line-fill { left: 24px; }
+  .timeline-node { left: 24px; }
+}
+
+/* ── Nav hero state ── */
+#mainNav.nav-hero a,
+#mainNav.nav-hero button,
+#mainNav.nav-hero .material-symbols-outlined { color: rgba(255,255,255,0.9) !important; }
+#mainNav.nav-hero a:hover { color: #fff !important; }
+#mainNav.nav-hero a.border-b { border-color: rgba(255,255,255,0.3) !important; }
+#mainNav.nav-hero .bg-tertiary { background: #d4a088 !important; color: #fff !important; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="fixed top-0 w-full z-[100] transition-all duration-500" id="mainNav">
+<div class="relative flex items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="hidden md:flex gap-8 items-center">
+  <div class="mega-trigger">
+    <a class="text-secondary border-b border-secondary/30 pb-1 font-label text-sm tracking-wide cursor-pointer" href="collection.html">Shop</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-6 gap-8">
+            <div class="col-span-2 space-y-6 pr-8 border-r border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-6">Find Your Light</h3>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Vases & Vessels</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Earrings</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Bracelets</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Necklaces</span></a>
+            </div>
+            <div class="col-span-4 grid grid-cols-4 gap-5">
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Star Column Vase</h4><span class="text-on-surface-variant text-xs">$268</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Jade Petal Drops</h4><span class="text-on-surface-variant text-xs">$88</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Volcanic Calm</h4><span class="text-on-surface-variant text-xs">$64</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/陶瓷珠子项链极浅灰底主图.jpg" alt="Earth Pendant" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Earth Pendant</h4><span class="text-on-surface-variant text-xs">$138</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Collections</a>
+</div>
+<a href="index.html" class="absolute left-1/2 -translate-x-1/2"><img alt="LumiClay" class="h-14 w-auto" src="logo.png"/></a>
+<div class="flex gap-6 items-center ml-auto">
+  <div class="hidden md:flex gap-8 mr-4">
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="story.html">Our Story</a>
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Process</a>
+  </div>
+  <button class="material-symbols-outlined text-secondary scale-95">search</button>
+  <button class="material-symbols-outlined text-secondary scale-95">person</button>
+  <button class="material-symbols-outlined text-secondary scale-95 relative">shopping_bag<span class="absolute -top-1 -right-1 w-4 h-4 bg-tertiary text-white text-[9px] rounded-full flex items-center justify-center font-label">2</span></button>
+  <button class="md:hidden material-symbols-outlined text-secondary" id="mobileMenuBtn">menu</button>
+</div>
+</div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="fixed inset-0 z-[99] bg-surface translate-x-full transition-transform duration-500 flex flex-col pt-24 px-8 pb-8" id="mobileMenu">
+  <button class="absolute top-5 right-6 material-symbols-outlined text-2xl text-on-surface" id="mobileMenuClose">close</button>
+  <div class="space-y-6 flex-1">
+    <a href="collection.html" class="block font-headline text-3xl italic text-on-surface">Shop</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Collections</a>
+    <a href="story.html" class="block font-headline text-3xl italic text-on-surface">Our Story</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Process</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════════════════════════════
+     CINEMATIC HERO
+     ═══════════════════════════════════ -->
+<section class="relative h-screen w-full overflow-hidden" id="heroSection">
+  <video class="absolute inset-0 w-full h-full object-cover" autoplay muted loop playsinline>
+    <source src="clay hero.mp4" type="video/mp4"/>
+  </video>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70"></div>
+
+  <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+    <span class="fade-in text-gold font-label text-xs uppercase tracking-[0.4em] mb-6">The LumiClay Story</span>
+    <h1 class="fade-in fade-in-d1 font-headline text-5xl md:text-7xl lg:text-8xl text-white tracking-tighter leading-[0.95]">
+      When Earth<br/><span class="serif-italic">Meets Light</span>
+    </h1>
+    <p class="fade-in fade-in-d2 text-white/60 text-base md:text-lg max-w-lg mt-8 leading-relaxed">
+      A journey from silent soil to luminous art — shaped by hands that believe beauty lives in imperfection.
+    </p>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3">
+    <span class="text-white/40 font-label text-[10px] uppercase tracking-[0.3em]">Scroll to explore</span>
+    <span class="material-symbols-outlined text-white/50 text-2xl hero-scroll-arrow">expand_more</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     ORIGIN STORY — Alternating sections
+     ═══════════════════════════════════ -->
+
+<!-- Origin 1: The Beginning -->
+<section class="py-24 md:py-36 bg-surface overflow-hidden">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div class="slide-left relative">
+        <div class="aspect-[4/5] rounded-xl overflow-hidden">
+          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="Potter at the wheel" loading="lazy"/>
+        </div>
+        <!-- Floating accent -->
+        <div class="absolute -bottom-6 -right-6 bg-secondary-container p-8 rounded-lg hidden md:flex items-center gap-4">
+          <span class="material-symbols-outlined text-3xl text-on-secondary-container">format_quote</span>
+          <p class="font-headline text-sm italic text-on-secondary-container max-w-[180px]">"Clay remembers every touch."</p>
+        </div>
+      </div>
+      <div class="slide-right space-y-8">
+        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Beginning</span>
+        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Born from a<br/><span class="serif-italic">Simple Wish</span></h2>
+        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
+          <p>In a world pressed on fast-forward, LumiClay was born from a desire to slow down. It started in a small garage studio in 2019 — just a wheel, a bag of clay, and the belief that something beautiful could emerge from silence.</p>
+          <p>The founder spent months learning to center clay — a meditative act that requires presence, patience, and the willingness to start over. That philosophy became the heartbeat of everything we make.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Origin 2: The Philosophy (reversed) -->
+<section class="py-24 md:py-36 bg-surface-container-low overflow-hidden">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div class="slide-left space-y-8 md:order-1 order-2">
+        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Philosophy</span>
+        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Light Within<br/><span class="serif-italic">the Darkness</span></h2>
+        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
+          <p>"Lumi" means light. "Clay" means earth. The beauty of ceramics lies in its transformation — from silent, humble soil into something luminous through the alchemy of fire.</p>
+          <p>We believe every piece of clay carries potential light within it. Our role is simply to coax that light out — through careful hands, patient glazing, and the ancient fire of the kiln. What emerges is never quite what we planned. It's always better.</p>
+        </div>
+      </div>
+      <div class="slide-right relative md:order-2 order-1">
+        <div class="aspect-[4/5] rounded-xl overflow-hidden">
+          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="Light through ceramics" loading="lazy"/>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Origin 3: The Mission -->
+<section class="py-24 md:py-36 bg-surface overflow-hidden">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <div class="slide-left relative">
+        <div class="aspect-[4/5] rounded-xl overflow-hidden">
+          <img class="parallax-img w-full h-[115%] object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="Studio workspace" loading="lazy"/>
+        </div>
+      </div>
+      <div class="slide-right space-y-8">
+        <span class="text-secondary font-label text-xs uppercase tracking-[0.3em] block">The Mission</span>
+        <h2 class="font-headline text-4xl md:text-5xl text-on-surface leading-[1.1]">Slow Craft for a<br/><span class="serif-italic">Fast World</span></h2>
+        <div class="space-y-5 text-on-surface-variant text-base leading-relaxed max-w-md">
+          <p>In an age of mass production, we choose to make less, but make it mean more. Every piece takes between 3 to 6 weeks from raw clay to finished object — and we wouldn't have it any other way.</p>
+          <p>Our mission is simple: to place something handmade, imperfect, and full of intention into the hands of people who value presence over perfection. A cup that makes your morning tea a ritual. A vase that makes silence visible.</p>
+        </div>
+        <a href="collection.html" class="inline-flex items-center gap-3 px-8 py-4 bg-secondary text-on-secondary rounded-full font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors">
+          Explore Our Work
+          <span class="material-symbols-outlined text-base">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     NUMBERS THAT SPEAK — Counter
+     ═══════════════════════════════════ -->
+<section class="py-24 md:py-32 bg-kiln relative overflow-hidden">
+  <!-- Subtle texture -->
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image:url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"></div>
+  <div class="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full" style="background:radial-gradient(circle,rgba(201,169,110,0.08) 0%,transparent 70%)"></div>
+
+  <div class="relative z-10 max-w-screen-xl mx-auto px-8">
+    <div class="text-center mb-20">
+      <span class="fade-in text-gold font-label text-xs uppercase tracking-[0.3em] mb-4 block">Numbers That Speak</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-white/95">The Story in <span class="serif-italic">Numbers</span></h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6">
+      <div class="fade-in text-center">
+        <div class="counter-num font-headline text-5xl md:text-6xl text-white mb-3" data-target="2000" data-suffix="+">0</div>
+        <div class="w-8 h-px bg-gold/40 mx-auto mb-3"></div>
+        <p class="text-white/45 font-label text-xs uppercase tracking-widest">Happy Collectors</p>
+      </div>
+      <div class="fade-in fade-in-d1 text-center">
+        <div class="counter-num font-headline text-5xl md:text-6xl text-white mb-3" data-target="1260" data-suffix="°C">0</div>
+        <div class="w-8 h-px bg-gold/40 mx-auto mb-3"></div>
+        <p class="text-white/45 font-label text-xs uppercase tracking-widest">Kiln Temperature</p>
+      </div>
+      <div class="fade-in fade-in-d2 text-center">
+        <div class="counter-num font-headline text-5xl md:text-6xl text-white mb-3" data-target="100" data-suffix="%">0</div>
+        <div class="w-8 h-px bg-gold/40 mx-auto mb-3"></div>
+        <p class="text-white/45 font-label text-xs uppercase tracking-widest">Plastic-Free Packaging</p>
+      </div>
+      <div class="fade-in fade-in-d3 text-center">
+        <div class="counter-num font-headline text-5xl md:text-6xl text-white mb-3" data-target="4.9" data-suffix="★" data-decimals="1">0</div>
+        <div class="w-8 h-px bg-gold/40 mx-auto mb-3"></div>
+        <p class="text-white/45 font-label text-xs uppercase tracking-widest">Average Rating</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     OUR VALUES — Draggable cards
+     ═══════════════════════════════════ -->
+<section class="py-24 md:py-32 bg-surface overflow-hidden">
+  <div class="max-w-screen-2xl mx-auto px-8 mb-14">
+    <div class="flex flex-col md:flex-row justify-between items-baseline gap-4">
+      <div>
+        <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">What We Stand For</span>
+        <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface">Our <span class="serif-italic">Values</span></h2>
+      </div>
+      <p class="fade-in fade-in-d2 text-on-surface-variant text-sm flex items-center gap-2">
+        <span class="material-symbols-outlined text-base">swipe</span>
+        Drag to explore
+      </p>
+    </div>
+  </div>
+
+  <div class="values-scroll flex gap-6 overflow-x-auto px-8 pb-6 no-scrollbar" id="valuesScroll">
+    <!-- Value 1 -->
+    <div class="flex-shrink-0 w-[320px] md:w-[380px] h-[500px] md:h-[560px] relative rounded-2xl overflow-hidden group">
+      <img class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-110 group-hover:brightness-[0.3] transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsk_B6hpUK34RHg53k07kF_hKW-SFiKPP9Z6hiAG2k17YVr4KDeaLe0T0TSHIAV7_sWP3O5Ed-VEAMcpfJZLwcBbXmW6CNNvWjloTMIwFp_8NJX3XfY8N3TX_6rlI7A9XTT50Qqb8_aYRoAzV_0hGc3dIUrpdZWxJP31IvJRgKWcmCNPVmxpPhCou8FmzBj1qTXXSiaXE_rQH7kKC2VRRk8Jch2carFclUX97-XVDC-NbZ6y74LPjMx6-pnG8m3iQRcT4PvJO1cXk" alt="Handcraft" loading="lazy"/>
+      <div class="absolute inset-0 flex flex-col justify-end p-8">
+        <span class="font-headline text-6xl text-white/10 mb-4">01</span>
+        <h3 class="font-headline text-2xl text-white mb-3">Handmade Always</h3>
+        <p class="text-white/55 text-sm leading-relaxed max-w-[280px]">Every piece passes through human hands at every stage. No shortcuts, no machines, no compromise. The hand is the first and final tool.</p>
+      </div>
+    </div>
+    <!-- Value 2 -->
+    <div class="flex-shrink-0 w-[320px] md:w-[380px] h-[500px] md:h-[560px] relative rounded-2xl overflow-hidden group">
+      <img class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-110 group-hover:brightness-[0.3] transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBvCZkQ0mAVBknqYGBjdQOCedqRYLzln5FDE57RgRN6gTVYTe4cUtUpeZj2OAucSvDRFAR9TdekmAwRD141NiiK65_5tTTQ24OGV3vNDJCnpjetGo-CHSb9SV1nw9RNe4FzLjdopBBkMc2Nko2HotbHdvHRdkgMkvfGHCnemu4DSqAP3E86nBv5Qh-tcEADUTJvs3xC2g1sn3Zo8eDyPKaCUsF5EaPjUO9VhHSjKZ1FagyzDHQvKGi02rr8uscBNE22u4xlGMG2-8" alt="Sustainability" loading="lazy"/>
+      <div class="absolute inset-0 flex flex-col justify-end p-8">
+        <span class="font-headline text-6xl text-white/10 mb-4">02</span>
+        <h3 class="font-headline text-2xl text-white mb-3">Earth-First</h3>
+        <p class="text-white/55 text-sm leading-relaxed max-w-[280px]">We source clay locally, fire with reclaimed wood when possible, and ship in 100% recycled kraft packaging. Zero plastic, zero waste in our studio.</p>
+      </div>
+    </div>
+    <!-- Value 3 -->
+    <div class="flex-shrink-0 w-[320px] md:w-[380px] h-[500px] md:h-[560px] relative rounded-2xl overflow-hidden group">
+      <img class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-110 group-hover:brightness-[0.3] transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz8TbyKY9gPrxUp_baYVGHyRtZgRAf_-T39ORQIye25_Yn_-VBkVhEG_2y6eBJ3xpK2zGPk2CPhVn6dl-uySJPSkl7hfBjnldMlQk_HNl0P5SaK9k2mQNZ7Ra5RuGG4YmwyJhWDK4w4wNtd0spyqBXgTfT-VUlGd_ZwhYwSS5P93c5-LLNH4w6xucrATQRC-cZuvPr0Wvr1LX6z8JnFYDnJjJwDT7QT0prtG3Mi0SKS3swuYxz5FtwEgAo8nKokyRyEYZfjNGckik" alt="Imperfection" loading="lazy"/>
+      <div class="absolute inset-0 flex flex-col justify-end p-8">
+        <span class="font-headline text-6xl text-white/10 mb-4">03</span>
+        <h3 class="font-headline text-2xl text-white mb-3">Perfectly Imperfect</h3>
+        <p class="text-white/55 text-sm leading-relaxed max-w-[280px]">We celebrate the wobble, the uneven glaze, the fingerprint left in clay. These aren't flaws — they're signatures of a human hand at work.</p>
+      </div>
+    </div>
+    <!-- Value 4 -->
+    <div class="flex-shrink-0 w-[320px] md:w-[380px] h-[500px] md:h-[560px] relative rounded-2xl overflow-hidden group">
+      <img class="absolute inset-0 w-full h-full object-cover brightness-[0.4] group-hover:scale-110 group-hover:brightness-[0.3] transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBwESRoogY3spcRS148ltn5S23f2r1R3vqkDaPcPfKkdcjeUHyLNvlIl_jk9PxZ-DDrGwiS-dZh5KAuXCf7P_T17jFFre7EaRKfS3GiALpxRNgLPTXmz2POahYeO5gydNQEQsWCEaRFA06OTvVaK1ljDaHuK-uOs4hlYFg0l15OUQGYqni6vt8v1Ic2FOI-EyHh0vDh08GjOVIREAWeCDag8j6GvfMFwkQaeF5ka5dd634dUT--v4gQWsH9SsNjarjBVKMT069kJOM" alt="Community" loading="lazy"/>
+      <div class="absolute inset-0 flex flex-col justify-end p-8">
+        <span class="font-headline text-6xl text-white/10 mb-4">04</span>
+        <h3 class="font-headline text-2xl text-white mb-3">Community Over Commerce</h3>
+        <p class="text-white/55 text-sm leading-relaxed max-w-[280px]">We don't chase trends or scale endlessly. We'd rather build a small community of people who truly connect with what we make.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     THE STUDIO — Masonry Gallery
+     ═══════════════════════════════════ -->
+<section class="py-24 md:py-32 bg-surface-container-low">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="text-center mb-16">
+      <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">Behind the Scenes</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface">Inside the <span class="serif-italic">Studio</span></h2>
+      <p class="fade-in fade-in-d2 text-on-surface-variant text-sm mt-4">Click any image to explore closer.</p>
+    </div>
+
+    <div class="masonry" id="studioGallery">
+      <div class="fade-in rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="Wheel throwing" loading="lazy" style="aspect-ratio:3/4"/>
+      </div>
+      <div class="fade-in fade-in-d1 rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="蓝色花瓶家居场景图_缩小版.jpg" alt="Blue vase in living room" loading="lazy" style="aspect-ratio:4/3"/>
+      </div>
+      <div class="fade-in fade-in-d2 rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="白色星形花瓶暗色场景图.jpg" alt="Star vase dark" loading="lazy" style="aspect-ratio:3/4"/>
+      </div>
+      <div class="fade-in rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="耳环暗色场景图.jpg" alt="Earrings on stone" loading="lazy" style="aspect-ratio:1/1"/>
+      </div>
+      <div class="fade-in fade-in-d1 rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="黑色花瓶家居场景图_缩小版.jpg" alt="Black vase scene" loading="lazy" style="aspect-ratio:4/3"/>
+      </div>
+      <div class="fade-in fade-in-d2 rounded-xl overflow-hidden cursor-pointer group" data-lightbox>
+        <img class="w-full object-cover group-hover:scale-105 transition-transform duration-500" src="黑色火山石手链暗色场景图.jpg" alt="Bracelet on stone" loading="lazy" style="aspect-ratio:3/4"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="absolute top-6 right-6 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors" id="lightboxClose">
+    <span class="material-symbols-outlined text-2xl">close</span>
+  </button>
+  <button class="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors" id="lightboxPrev">
+    <span class="material-symbols-outlined text-2xl">arrow_back</span>
+  </button>
+  <button class="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/20 transition-colors" id="lightboxNext">
+    <span class="material-symbols-outlined text-2xl">arrow_forward</span>
+  </button>
+  <img id="lightboxImg" src="" alt="Gallery view"/>
+</div>
+
+<!-- ═══════════════════════════════════
+     TIMELINE — Brand Milestones
+     ═══════════════════════════════════ -->
+<section class="py-24 md:py-32 bg-surface">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="text-center mb-20">
+      <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">Our Journey</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface">Milestones Along <span class="serif-italic">the Way</span></h2>
+    </div>
+
+    <div class="relative max-w-4xl mx-auto" id="timeline">
+      <div class="timeline-line"></div>
+      <div class="timeline-line-fill" id="timelineFill"></div>
+
+      <!-- 2019 -->
+      <div class="timeline-entry relative pb-20 md:pb-28" data-year="2019">
+        <div class="timeline-node" style="top:8px"></div>
+        <div class="timeline-item grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="md:text-right md:pr-16 pl-14 md:pl-0">
+            <span class="text-gold font-headline text-3xl">2019</span>
+            <h3 class="font-headline text-xl text-on-surface mt-2 mb-3">The First Wheel</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">A second-hand pottery wheel, a garage, and endless bags of clay. LumiClay begins as a personal meditation practice that slowly becomes something more.</p>
+          </div>
+          <div class="hidden md:block"></div>
+        </div>
+      </div>
+
+      <!-- 2020 -->
+      <div class="timeline-entry relative pb-20 md:pb-28" data-year="2020">
+        <div class="timeline-node" style="top:8px"></div>
+        <div class="timeline-item grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="hidden md:block"></div>
+          <div class="md:pl-16 pl-14">
+            <span class="text-gold font-headline text-3xl">2020</span>
+            <h3 class="font-headline text-xl text-on-surface mt-2 mb-3">First 100 Orders</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">Word spreads through Instagram. Our first small-batch collection of tea bowls sells out in 48 hours. We realize this quiet practice resonates with others seeking slowness.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2021 -->
+      <div class="timeline-entry relative pb-20 md:pb-28" data-year="2021">
+        <div class="timeline-node" style="top:8px"></div>
+        <div class="timeline-item grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="md:text-right md:pr-16 pl-14 md:pl-0">
+            <span class="text-gold font-headline text-3xl">2021</span>
+            <h3 class="font-headline text-xl text-on-surface mt-2 mb-3">The Studio Opens</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">We move into a sunlit studio space. Three kilns, two wheels, and enough shelves for the pieces that need time to dry. The team grows to four artisans.</p>
+          </div>
+          <div class="hidden md:block"></div>
+        </div>
+      </div>
+
+      <!-- 2023 -->
+      <div class="timeline-entry relative pb-20 md:pb-28" data-year="2023">
+        <div class="timeline-node" style="top:8px"></div>
+        <div class="timeline-item grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="hidden md:block"></div>
+          <div class="md:pl-16 pl-14">
+            <span class="text-gold font-headline text-3xl">2023</span>
+            <h3 class="font-headline text-xl text-on-surface mt-2 mb-3">Jewelry Line Launches</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">We expand into wearable ceramics — bracelets, earrings, and pendants. Each piece brings the warmth of clay to everyday life. The Volcanic Calm bracelet becomes our bestseller.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2025 -->
+      <div class="timeline-entry relative pb-8" data-year="2025">
+        <div class="timeline-node" style="top:8px"></div>
+        <div class="timeline-item grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="md:text-right md:pr-16 pl-14 md:pl-0">
+            <span class="text-gold font-headline text-3xl">2025</span>
+            <h3 class="font-headline text-xl text-on-surface mt-2 mb-3">2,000+ Collectors Worldwide</h3>
+            <p class="text-on-surface-variant text-sm leading-relaxed">Our pieces now live in homes across 30 countries. We remain small by choice, handmade by principle, and guided by the same quiet philosophy: find the light within clay.</p>
+          </div>
+          <div class="hidden md:block"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     MEET THE MAKER
+     ═══════════════════════════════════ -->
+<section class="py-24 md:py-32 bg-kiln relative overflow-hidden">
+  <div class="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full" style="background:radial-gradient(circle,rgba(201,169,110,0.1) 0%,transparent 70%)"></div>
+  <div class="absolute -bottom-20 -left-20 w-[300px] h-[300px] rounded-full" style="background:radial-gradient(circle,rgba(181,112,79,0.08) 0%,transparent 70%)"></div>
+
+  <div class="relative z-10 max-w-screen-xl mx-auto px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Portrait -->
+      <div class="fade-in relative">
+        <div class="aspect-[3/4] rounded-xl overflow-hidden">
+          <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="The Maker" loading="lazy"/>
+        </div>
+      </div>
+      <!-- Quote & Bio -->
+      <div>
+        <span class="fade-in text-gold font-label text-xs uppercase tracking-[0.3em] mb-6 block">Meet the Maker</span>
+        <div class="fade-in fade-in-d1 mb-8">
+          <span class="material-symbols-outlined text-4xl text-white/15 mb-4 block">format_quote</span>
+          <p class="font-headline text-2xl md:text-3xl text-white/90 italic leading-relaxed">
+            "I never set out to build a brand. I just wanted to make something honest with my hands — something that carries warmth long after it leaves the kiln."
+          </p>
+        </div>
+        <div class="fade-in fade-in-d2 flex items-center gap-6 mb-8">
+          <div class="w-px h-12 bg-white/15"></div>
+          <div>
+            <p class="font-headline text-lg text-gold serif-italic">The LumiClay Studio</p>
+            <p class="text-white/40 font-label text-xs uppercase tracking-widest mt-1">Founder & Lead Artisan</p>
+          </div>
+        </div>
+        <p class="fade-in fade-in-d3 text-white/45 text-sm leading-relaxed max-w-md">
+          A self-taught ceramicist who traded a desk job for a pottery wheel. After years of quiet practice, the studio has grown into a small collective of makers who share the same philosophy: slow down, pay attention, and let the clay teach you patience.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     NEWSLETTER
+     ═══════════════════════════════════ -->
+<section class="relative overflow-hidden bg-surface">
+  <div class="relative z-10 max-w-screen-xl mx-auto px-8 py-24 md:py-32">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
+      <div>
+        <span class="fade-in font-label text-xs uppercase tracking-[0.3em] mb-5 block text-secondary">Stay Connected</span>
+        <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface leading-[1.08] mb-6">Let Every Piece of Clay<br/><span class="serif-italic">Find Its Light</span></h2>
+        <p class="fade-in fade-in-d2 text-on-surface-variant text-sm md:text-base leading-relaxed max-w-md">Behind-the-scenes from the kiln, early access to new drops, and reflections on finding beauty in the everyday.</p>
+      </div>
+      <div class="fade-in fade-in-d3">
+        <div class="rounded-xl p-8 md:p-10 bg-surface-container-low">
+          <h3 class="font-headline text-2xl text-on-surface mb-2">Join the Studio</h3>
+          <p class="text-on-surface-variant text-sm mb-8">4,200+ collectors who believe in the beauty of imperfection.</p>
+          <form onsubmit="return false" class="space-y-4">
+            <input class="w-full bg-surface border border-outline-variant/30 rounded-xl px-5 py-4 text-on-surface text-sm placeholder:text-on-surface-variant/50 focus:border-secondary focus:ring-0 focus:outline-none transition-colors" placeholder="Your name" type="text"/>
+            <input class="w-full bg-surface border border-outline-variant/30 rounded-xl px-5 py-4 text-on-surface text-sm placeholder:text-on-surface-variant/50 focus:border-secondary focus:ring-0 focus:outline-none transition-colors" placeholder="Your email address" type="email"/>
+            <button class="w-full py-4 rounded-xl font-label text-xs uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110" style="background:linear-gradient(135deg,#5C3D2E,#A0674A)">
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="bg-surface-container-low pt-20 pb-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="col-span-1"><img src="logo.png" alt="LumiClay" class="h-8 w-auto mb-4"/><p class="text-on-surface-variant/80 font-body body-sm leading-relaxed max-w-xs">Finding the light within clay. Every imperfection is a breath, every piece a story.</p></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Explore</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="collection.html">Shop All</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Collections</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Care Guide</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Wholesale</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Support</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shipping &amp; Returns</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Privacy Policy</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Contact Us</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Connect</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Instagram</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Pinterest</a></li></ul></div>
+</div>
+<div class="px-12 pt-10 border-t border-outline-variant/10 text-center">
+<p class="text-on-surface-variant/80 font-body text-[10px] tracking-widest uppercase">&copy; 2025 LumiClay. From earth to light, one piece at a time.</p>
+</div>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+(function(){
+
+  /* ── Scroll animations (fade-in, slide-left, slide-right) ── */
+  const animObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+  document.querySelectorAll('.fade-in, .slide-left, .slide-right').forEach(el => animObs.observe(el));
+
+  /* ── Counter animation ── */
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      if (el.dataset.counted) return;
+      el.dataset.counted = 'true';
+
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      const decimals = parseInt(el.dataset.decimals) || 0;
+      const duration = 2000;
+      const startTime = performance.now();
+
+      function update(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease out cubic
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = eased * target;
+
+        if (decimals > 0) {
+          el.textContent = current.toFixed(decimals) + suffix;
+        } else {
+          el.textContent = Math.floor(current).toLocaleString() + suffix;
+        }
+
+        if (progress < 1) requestAnimationFrame(update);
+      }
+      requestAnimationFrame(update);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter-num').forEach(el => counterObs.observe(el));
+
+  /* ── Parallax images ── */
+  const parallaxImgs = document.querySelectorAll('.parallax-img');
+  function updateParallax() {
+    parallaxImgs.forEach(img => {
+      const rect = img.parentElement.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > viewH) return;
+      const progress = (viewH - rect.top) / (viewH + rect.height);
+      const offset = (progress - 0.5) * -60;
+      img.style.transform = `translateY(${offset}px)`;
+    });
+  }
+  window.addEventListener('scroll', updateParallax, { passive: true });
+  updateParallax();
+
+  /* ── Values drag scroll ── */
+  const valuesScroll = document.getElementById('valuesScroll');
+  let isDragging = false, startX, scrollLeft;
+  valuesScroll.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.pageX - valuesScroll.offsetLeft;
+    scrollLeft = valuesScroll.scrollLeft;
+  });
+  valuesScroll.addEventListener('mouseleave', () => isDragging = false);
+  valuesScroll.addEventListener('mouseup', () => isDragging = false);
+  valuesScroll.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - valuesScroll.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    valuesScroll.scrollLeft = scrollLeft - walk;
+  });
+
+  /* ── Lightbox ── */
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightboxImg');
+  const galleryItems = document.querySelectorAll('[data-lightbox]');
+  let currentLightbox = 0;
+  const gallerySrcs = Array.from(galleryItems).map(item => item.querySelector('img').src);
+
+  galleryItems.forEach((item, index) => {
+    item.addEventListener('click', () => {
+      currentLightbox = index;
+      lightboxImg.src = gallerySrcs[index];
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  document.getElementById('lightboxPrev').addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentLightbox = (currentLightbox - 1 + gallerySrcs.length) % gallerySrcs.length;
+    lightboxImg.src = gallerySrcs[currentLightbox];
+  });
+  document.getElementById('lightboxNext').addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentLightbox = (currentLightbox + 1) % gallerySrcs.length;
+    lightboxImg.src = gallerySrcs[currentLightbox];
+  });
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+    if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+  });
+
+  /* ── Timeline scroll fill + activation ── */
+  const timeline = document.getElementById('timeline');
+  const timelineFill = document.getElementById('timelineFill');
+  const timelineEntries = document.querySelectorAll('.timeline-entry');
+
+  function updateTimeline() {
+    if (!timeline) return;
+    const rect = timeline.getBoundingClientRect();
+    const viewH = window.innerHeight;
+    const timelineH = timeline.offsetHeight;
+
+    // Fill line based on scroll progress
+    const scrolledPast = Math.max(0, viewH * 0.6 - rect.top);
+    const fillH = Math.min(scrolledPast, timelineH);
+    timelineFill.style.height = fillH + 'px';
+
+    // Activate nodes and items
+    timelineEntries.forEach(entry => {
+      const entryRect = entry.getBoundingClientRect();
+      const node = entry.querySelector('.timeline-node');
+      const item = entry.querySelector('.timeline-item');
+      if (entryRect.top < viewH * 0.65) {
+        node.classList.add('active');
+        item.classList.add('active');
+      }
+    });
+  }
+  window.addEventListener('scroll', updateTimeline, { passive: true });
+  updateTimeline();
+
+  /* ── Nav: transparent on hero, solid after ── */
+  const nav = document.getElementById('mainNav');
+  const hero = document.getElementById('heroSection');
+  const heroH = hero ? hero.offsetHeight : 600;
+  let lastY = 0;
+
+  function updateNav() {
+    const y = window.scrollY;
+    const inHero = y < heroH - 80;
+
+    if (inHero) {
+      nav.style.background = 'transparent';
+      nav.style.backdropFilter = 'none';
+      nav.style.boxShadow = 'none';
+      nav.classList.add('nav-hero');
+    } else {
+      nav.style.background = 'rgba(250,248,244,0.92)';
+      nav.style.backdropFilter = 'blur(20px) saturate(1.2)';
+      nav.style.boxShadow = '0 1px 0 rgba(0,0,0,0.04)';
+      nav.classList.remove('nav-hero');
+    }
+
+    if (!inHero) {
+      if (y > lastY && y - lastY > 5) nav.style.transform = 'translateY(-100%)';
+      else if (lastY > y && lastY - y > 5) nav.style.transform = 'translateY(0)';
+    } else {
+      nav.style.transform = 'translateY(0)';
+    }
+    lastY = y;
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  /* ── Mega Menu ── */
+  const triggers = document.querySelectorAll('.mega-trigger');
+  let closeTimer = null;
+  triggers.forEach(trigger => {
+    const panel = trigger.querySelector('.mega-panel');
+    if (!panel) return;
+    function open() { clearTimeout(closeTimer); document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open')); panel.style.top = nav.offsetHeight + 'px'; panel.classList.add('open'); }
+    function scheduleClose() { closeTimer = setTimeout(() => panel.classList.remove('open'), 200); }
+    trigger.addEventListener('mouseenter', open);
+    trigger.addEventListener('mouseleave', scheduleClose);
+    panel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    panel.addEventListener('mouseleave', scheduleClose);
+  });
+  window.addEventListener('scroll', () => { document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open')); }, { passive: true });
+
+  /* ── Mobile Menu ── */
+  const mobileMenu = document.getElementById('mobileMenu');
+  document.getElementById('mobileMenuBtn').addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
+  document.getElementById('mobileMenuClose').addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
+
+})();
+</script>
+</body>
+</html>
