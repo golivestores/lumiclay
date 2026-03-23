@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shop All | LumiClay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-primary":"#faf7f7","surface-container-high":"#e5eae0","outline":"#767c74",
+        "on-primary-container":"#525252","tertiary-container":"#eeb496",
+        "surface":"#fafaf5","surface-container-highest":"#dee4da","background":"#fafaf5",
+        "surface-container-low":"#f3f4ee","on-tertiary-container":"#59331d",
+        "inverse-surface":"#0d0f0c","on-tertiary":"#fff7f5","surface-bright":"#fafaf5",
+        "surface-dim":"#d5dcd0","secondary-fixed":"#f4e0be","on-secondary-container":"#5e5036",
+        "secondary":"#5C3D2E","primary":"#5f5e5e","tertiary":"#A0674A",
+        "surface-variant":"#dee4da","primary-container":"#e4e2e1",
+        "on-background":"#2e342d","secondary-container":"#f4e0be",
+        "on-surface-variant":"#5b6159","on-secondary":"#fff8f1","primary-dim":"#525252",
+        "on-surface":"#2e342d","outline-variant":"#aeb4aa",
+        "surface-container-lowest":"#ffffff","surface-container":"#ecefe7",
+        "secondary-dim":"#4A2E22","secondary-fixed-dim":"#e6d2b0",
+        "gold":"#c9a96e","kiln":"#2c2820",
+      },
+      fontFamily: { "headline":["Noto Serif"], "body":["Manrope"], "label":["Manrope"] },
+      borderRadius: {"DEFAULT":"0.25rem","lg":"0.75rem","xl":"1rem","full":"9999px"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  display: inline-block; line-height: 1;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+
+/* ── Scroll Fade In ── */
+.fade-in {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in-d1 { transition-delay: 0.1s; }
+.fade-in-d2 { transition-delay: 0.2s; }
+.fade-in-d3 { transition-delay: 0.3s; }
+.fade-in-d4 { transition-delay: 0.4s; }
+
+/* ── Mega Menu ── */
+.mega-panel {
+  position: fixed; top: auto; left: 0; right: 0; width: 100%;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s; z-index: 200;
+}
+.mega-panel.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* ── Custom Checkbox ── */
+.filter-check {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 1.5px solid #aeb4aa; background: transparent;
+  cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+  position: relative;
+}
+.filter-check:checked {
+  background: #5C3D2E; border-color: #5C3D2E;
+}
+.filter-check:checked::after {
+  content: ''; position: absolute; top: 2px; left: 5px;
+  width: 5px; height: 9px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.filter-check:hover { border-color: #5C3D2E; }
+
+/* ── Custom Radio ── */
+.filter-radio {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid #aeb4aa; background: transparent;
+  cursor: pointer; transition: all 0.2s; flex-shrink: 0;
+  position: relative;
+}
+.filter-radio:checked { border-color: #5C3D2E; }
+.filter-radio:checked::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #5C3D2E;
+}
+.filter-radio:hover { border-color: #5C3D2E; }
+
+/* ── Product Grid Animation ── */
+.product-card {
+  opacity: 1; transform: scale(1);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.product-card.hiding {
+  opacity: 0; transform: scale(0.95);
+  pointer-events: none; position: absolute; visibility: hidden;
+}
+
+/* ── Mobile Filter Drawer ── */
+.filter-drawer {
+  transform: translateY(100%);
+  transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.filter-drawer.open { transform: translateY(0); }
+.filter-overlay {
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s;
+}
+.filter-overlay.open { opacity: 1; pointer-events: auto; }
+
+/* ── Sidebar Filter Group Toggle ── */
+.filter-group-content {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+.filter-group-content.open { max-height: 300px; }
+.filter-chevron { transition: transform 0.3s; }
+.filter-chevron.open { transform: rotate(180deg); }
+
+/* ── Active filter count badge ── */
+.filter-count {
+  display: none; min-width: 18px; height: 18px;
+  border-radius: 9999px; background: #5C3D2E; color: #fff;
+  font-size: 10px; align-items: center; justify-content: center;
+  padding: 0 5px;
+}
+.filter-count.show { display: inline-flex; }
+
+/* ── Sort dropdown ── */
+.sort-dropdown {
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: all 0.25s ease;
+}
+.sort-dropdown.open {
+  opacity: 1; visibility: visible; transform: translateY(0);
+}
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- ═══════════════════════════════════
+     NAVIGATION (same as homepage, non-hero mode)
+     ═══════════════════════════════════ -->
+<nav class="fixed top-0 w-full z-[100] transition-all duration-500" id="mainNav" style="background:rgba(250,248,244,0.92);backdrop-filter:blur(20px) saturate(1.2);box-shadow:0 1px 0 rgba(0,0,0,0.04)">
+<div class="relative flex items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+
+<!-- Left Navigation -->
+<div class="hidden md:flex gap-8 items-center">
+  <div class="mega-trigger">
+    <a class="text-secondary border-b border-secondary/30 pb-1 font-label text-sm tracking-wide cursor-pointer" href="#">Shop</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-6 gap-8">
+            <div class="col-span-2 space-y-6 pr-8 border-r border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-6">Find Your Light</h3>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Vases & Vessels</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Earrings</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Bracelets</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Necklaces</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Figurines</span></a>
+              <div class="pt-4"><a href="#" class="text-secondary font-label text-xs uppercase tracking-widest hover:underline underline-offset-4">View All Products &rarr;</a></div>
+            </div>
+            <div class="col-span-4 grid grid-cols-4 gap-5">
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Star Column Vase</h4><span class="text-on-surface-variant text-xs">$268</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Jade Petal Drops</h4><span class="text-on-surface-variant text-xs">$88</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Volcanic Calm</h4><span class="text-on-surface-variant text-xs">$64</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/陶瓷珠子项链极浅灰底主图.jpg" alt="Earth Pendant" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Earth Pendant</h4><span class="text-on-surface-variant text-xs">$138</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mega-trigger">
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide cursor-pointer" href="#">Collections</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-4 gap-6">
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHJv6ufrlrcpphTQiblzn6aCsmr0kCK5i9bmAJ1LGTH7p0gitdDvN50gb-mSxv0BmaS5YXRHiibDBGfc9x_iRMEsMBq5sVQgPw9SIGxb8_envib38oAR5jsUFd1YvLD2tG_ysvfUdt4yekjkgcTmTv-yuTpH-cNpdC8gn98_NpoFjIfAAoMGl_WaVZDs5iAmyJOvxXht8uPRLhbmRP9g2G8I1cIglKkAcHMGwiRerOm-hZiebXjqfEtKC74WlwdmMwtxYy6ZOU5Lc" alt="Tea Room" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5"><span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Ceremony</span><h4 class="font-headline text-xl text-white">The Tea Room</h4></div>
+            </a>
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzZ_9rnJgotlqQzaSeiXDElxGYBtPrJeR_Qg6LoIsNUPcHiVqFW5wEWQdDxfL4McQdM8XHaF9dp11wAjlfzjYbldG2D7C5TTx7GI_E8-k0mEblyqzN62E44sbi5T0aUQJG_2CZIclYyreGfxMwihk0Iu-ctj26PynUZxAhtOl3HTM6KZ04M0N7wVMM2hJbOP3J2INKAPDxlvNziiFjM8Im_60heBNVu8UD7KpbVYPDK097Uz4BmoBDjS_w8Whg8Mac9medcYnCpqo" alt="Living Sanctuary" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5"><span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Interior</span><h4 class="font-headline text-xl text-white">Living Sanctuary</h4></div>
+            </a>
+            <a href="#" class="group relative rounded-xl overflow-hidden aspect-[4/3]">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9SnCNXn2qpgD7s_ewImgmDCewrecLFLlE4XlYCkYAHmhd5NOFhVY53iSdl7OoOy9ifJ4113gIZhmo0Ds5aEOX0SIP9uSmIaaPQ6lSCdA8XLQ_w9ISbezEN0AJrAuTBthhgn64TwEbZHdxZ_wXkJT1Vn3Kh6A8J0BOeSddhkKk_XUFpM3E53sNQIDp20OloJg58siAyoYGGEA-LCBINetRXfeyc8LCQkCnPoPO6iGVKF2NYD6SHOf4DM48KjINAxnEAJTGcEclZJU" alt="Minimalist Desk" class="w-full h-full object-cover brightness-75 group-hover:scale-110 group-hover:brightness-50 transition-all duration-700"/>
+              <div class="absolute inset-0 flex flex-col justify-end p-5"><span class="text-white/60 font-label text-[10px] uppercase tracking-[0.2em] mb-1">Workspace</span><h4 class="font-headline text-xl text-white">The Minimalist Desk</h4></div>
+            </a>
+            <div class="flex flex-col justify-center pl-6 border-l border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-4">Spaces That Glow</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed mb-6">Bringing warmth to every corner of your world.</p>
+              <a href="#" class="text-secondary font-label text-xs uppercase tracking-widest hover:underline underline-offset-4">View All Collections &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Center Logo -->
+<a href="index.html" class="absolute left-1/2 -translate-x-1/2">
+<img alt="LumiClay" class="h-14 w-auto" src="logo.png"/>
+</a>
+
+<!-- Right Actions -->
+<div class="flex gap-6 items-center ml-auto">
+<div class="hidden md:flex gap-8 mr-4">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Our Story</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Process</a>
+</div>
+<button class="material-symbols-outlined text-secondary scale-95">search</button>
+<button class="material-symbols-outlined text-secondary scale-95">person</button>
+<button class="material-symbols-outlined text-secondary scale-95 relative">
+  shopping_bag
+  <span class="absolute -top-1 -right-1 w-4 h-4 bg-tertiary text-white text-[9px] rounded-full flex items-center justify-center font-label">2</span>
+</button>
+<button class="md:hidden material-symbols-outlined text-secondary" id="mobileMenuBtn">menu</button>
+</div>
+
+</div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div class="fixed inset-0 z-[99] bg-surface translate-x-full transition-transform duration-500 flex flex-col pt-24 px-8 pb-8" id="mobileMenu">
+  <button class="absolute top-5 right-6 material-symbols-outlined text-2xl text-on-surface" id="mobileMenuClose">close</button>
+  <div class="space-y-6 flex-1">
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Shop</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Collections</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Our Story</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Process</a>
+  </div>
+  <div class="flex gap-4 pt-8 border-t border-outline-variant/20">
+    <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Instagram</a>
+    <a href="#" class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Pinterest</a>
+  </div>
+</div>
+
+<main class="pt-[88px]">
+
+<!-- ═══════════════════════════════════
+     COLLECTION HERO
+     ═══════════════════════════════════ -->
+<section class="relative overflow-hidden" style="min-height:40vh">
+  <img class="absolute inset-0 w-full h-full object-cover object-center" src="黑色花瓶家居场景图_缩小版.jpg" alt="Collection hero"/>
+  <div class="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/20"></div>
+  <div class="relative z-10 max-w-screen-2xl mx-auto px-8 py-20 md:py-28 flex flex-col justify-end" style="min-height:40vh">
+    <div class="max-w-2xl">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-2 mb-8">
+        <a href="index.html" class="font-label text-xs uppercase tracking-widest text-white/60 hover:text-white transition-colors">Home</a>
+        <span class="material-symbols-outlined text-sm text-white/40">chevron_right</span>
+        <span class="font-label text-xs uppercase tracking-widest text-gold">Shop All</span>
+      </nav>
+      <h1 class="fade-in font-headline text-5xl md:text-6xl lg:text-7xl text-white tracking-tighter leading-none">
+        Shop <span class="serif-italic">All</span>
+      </h1>
+      <p class="fade-in fade-in-d1 text-white/70 text-base md:text-lg leading-relaxed mt-6 max-w-lg">
+        Every piece begins as silent earth and emerges luminous. Browse our full collection of handcrafted ceramics, jewelry, and sculptural objects.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     TOOLBAR (sticky)
+     ═══════════════════════════════════ -->
+<div class="bg-surface" style="box-shadow:0 1px 0 rgba(0,0,0,0.04)">
+  <div class="max-w-screen-2xl mx-auto px-8 py-4 flex items-center justify-between gap-4">
+    <!-- Left: Mobile filter button -->
+    <button class="lg:hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant hover:border-secondary hover:text-secondary transition-all" id="mobileFilterBtn">
+      <span class="material-symbols-outlined text-lg">tune</span>
+      Filters
+      <span class="filter-count" id="mobileFilterCount">0</span>
+    </button>
+
+    <!-- Left: Product count (desktop) -->
+    <p class="hidden lg:block font-label text-sm text-on-surface-variant">
+      <span id="productCount">9</span> pieces
+    </p>
+
+    <!-- Right: Sort -->
+    <div class="relative ml-auto">
+      <button class="inline-flex items-center gap-2 font-label text-sm text-on-surface-variant hover:text-secondary transition-colors" id="sortBtn">
+        <span class="material-symbols-outlined text-lg">swap_vert</span>
+        <span id="sortLabel">Featured</span>
+        <span class="material-symbols-outlined text-sm">expand_more</span>
+      </button>
+      <div class="sort-dropdown absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl shadow-black/8 py-2 z-50" id="sortDropdown">
+        <button class="sort-option w-full text-left px-5 py-3 font-label text-sm text-on-surface hover:bg-surface-container-low transition-colors" data-sort="featured">Featured</button>
+        <button class="sort-option w-full text-left px-5 py-3 font-label text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors" data-sort="price-asc">Price: Low to High</button>
+        <button class="sort-option w-full text-left px-5 py-3 font-label text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors" data-sort="price-desc">Price: High to Low</button>
+        <button class="sort-option w-full text-left px-5 py-3 font-label text-sm text-on-surface-variant hover:bg-surface-container-low transition-colors" data-sort="newest">Newest</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     MAIN CONTENT: SIDEBAR + GRID
+     ═══════════════════════════════════ -->
+<section class="max-w-screen-2xl mx-auto px-8 py-12 md:py-16">
+  <div class="flex gap-12 lg:gap-16">
+
+    <!-- ── SIDEBAR (Desktop) ── -->
+    <aside class="hidden lg:block w-[260px] flex-shrink-0" id="desktopSidebar">
+
+      <!-- Category -->
+      <div class="mb-10">
+        <button class="filter-toggle flex items-center justify-between w-full mb-5" data-group="category">
+          <h3 class="font-headline text-lg text-on-surface">Category</h3>
+          <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="filter-group-content open" data-group="category">
+          <div class="space-y-4 pb-2">
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="category" value="vases"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Vases & Vessels</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">5</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="category" value="earrings"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Earrings</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">1</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="category" value="bracelets"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Bracelets</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">2</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="category" value="necklaces"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Necklaces</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">1</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div class="mb-10">
+        <button class="filter-toggle flex items-center justify-between w-full mb-5" data-group="price">
+          <h3 class="font-headline text-lg text-on-surface">Price</h3>
+          <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="filter-group-content open" data-group="price">
+          <div class="space-y-4 pb-2">
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="price" value="under100"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Under $100</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">3</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="price" value="100to200"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">$100 – $200</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">3</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="price" value="200to300"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">$200 – $300</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">2</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="price" value="300plus"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">$300+</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">1</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tags -->
+      <div class="mb-10">
+        <button class="filter-toggle flex items-center justify-between w-full mb-5" data-group="tags">
+          <h3 class="font-headline text-lg text-on-surface">Tags</h3>
+          <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+        </button>
+        <div class="filter-group-content open" data-group="tags">
+          <div class="space-y-4 pb-2">
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="tags" value="best-seller"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Best Seller</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">3</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="tags" value="new"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">New Arrival</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">2</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <input type="checkbox" class="filter-check" data-filter="tags" value="limited"/>
+              <span class="font-label text-sm text-on-surface-variant group-hover:text-on-surface transition-colors">Limited Edition</span>
+              <span class="ml-auto font-label text-xs text-outline-variant">1</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clear All -->
+      <button class="font-label text-xs uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-colors border-b border-outline-variant/30 pb-1 hidden" id="clearAll">
+        Clear All Filters
+      </button>
+
+    </aside>
+
+    <!-- ── PRODUCT GRID ── -->
+    <div class="flex-1 min-w-0">
+      <!-- Active filters chips -->
+      <div class="flex flex-wrap gap-2 mb-8 hidden" id="activeFilters"></div>
+
+      <!-- Empty state -->
+      <div class="hidden text-center py-20" id="emptyState">
+        <span class="material-symbols-outlined text-6xl text-outline-variant mb-4">search_off</span>
+        <h3 class="font-headline text-2xl text-on-surface mb-2">No pieces found</h3>
+        <p class="text-on-surface-variant text-sm mb-6">Try adjusting your filters to discover more.</p>
+        <button class="px-6 py-3 rounded-full bg-secondary text-on-secondary font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors" id="emptyReset">Clear Filters</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 md:gap-x-8 md:gap-y-14" id="productGrid">
+
+        <!-- Product 1: Star Column Vase -->
+        <a href="#" class="product-card group" data-category="vases" data-price="268" data-tags="best-seller" data-order="1" data-name="Star Column Vase">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" loading="lazy"/>
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+            <!-- Quick view overlay -->
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Star Column Vase</h3>
+            <p class="text-on-surface-variant text-xs">Layered Porcelain</p>
+            <span class="font-label text-sm text-secondary block pt-1">$268</span>
+          </div>
+        </a>
+
+        <!-- Product 2: Jade Petal Drops -->
+        <a href="#" class="product-card group" data-category="earrings" data-price="88" data-tags="new" data-order="2" data-name="Jade Petal Drops">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" loading="lazy"/>
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">New</span>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Jade Petal Drops</h3>
+            <p class="text-on-surface-variant text-xs">Marbled Porcelain</p>
+            <span class="font-label text-sm text-secondary block pt-1">$88</span>
+          </div>
+        </a>
+
+        <!-- Product 3: Dune Vessel No. 3 -->
+        <a href="#" class="product-card group" data-category="vases" data-price="320" data-tags="" data-order="3" data-name="Dune Vessel No. 3">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/黑白斑驳陶瓷花瓶极浅灰底主图.jpg" alt="Dune Vessel No. 3" loading="lazy"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Dune Vessel No. 3</h3>
+            <p class="text-on-surface-variant text-xs">Pit-fired Stoneware</p>
+            <span class="font-label text-sm text-secondary block pt-1">$320</span>
+          </div>
+        </a>
+
+        <!-- Product 4: Volcanic Calm Bracelet -->
+        <a href="#" class="product-card group" data-category="bracelets" data-price="64" data-tags="best-seller" data-order="4" data-name="Volcanic Calm Bracelet">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm Bracelet" loading="lazy"/>
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Volcanic Calm Bracelet</h3>
+            <p class="text-on-surface-variant text-xs">Lava Stone & Ceramic</p>
+            <span class="font-label text-sm text-secondary block pt-1">$64</span>
+          </div>
+        </a>
+
+        <!-- Product 5: Heart of Earth Pendant -->
+        <a href="#" class="product-card group" data-category="necklaces" data-price="138" data-tags="" data-order="5" data-name="Heart of Earth Pendant">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/陶瓷珠子项链极浅灰底主图.jpg" alt="Heart of Earth Pendant" loading="lazy"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Heart of Earth Pendant</h3>
+            <p class="text-on-surface-variant text-xs">Hand-painted Ceramic</p>
+            <span class="font-label text-sm text-secondary block pt-1">$138</span>
+          </div>
+        </a>
+
+        <!-- Product 6: Azure Twist Vase -->
+        <a href="#" class="product-card group" data-category="vases" data-price="245" data-tags="new" data-order="6" data-name="Azure Twist Vase">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/蓝白花瓶极浅灰底主图.jpg" alt="Azure Twist Vase" loading="lazy"/>
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">New</span>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Azure Twist Vase</h3>
+            <p class="text-on-surface-variant text-xs">Glazed Porcelain</p>
+            <span class="font-label text-sm text-secondary block pt-1">$245</span>
+          </div>
+        </a>
+
+        <!-- Product 7: Coral Bloom Vase -->
+        <a href="#" class="product-card group" data-category="vases" data-price="195" data-tags="" data-order="7" data-name="Coral Bloom Vase">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/蓝色花瓶极浅灰底主图.jpg" alt="Coral Bloom Vase" loading="lazy"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Coral Bloom Vase</h3>
+            <p class="text-on-surface-variant text-xs">Ribbed Blue Clay</p>
+            <span class="font-label text-sm text-secondary block pt-1">$195</span>
+          </div>
+        </a>
+
+        <!-- Product 8: Kiln Garden Bracelet -->
+        <a href="#" class="product-card group" data-category="bracelets" data-price="86" data-tags="" data-order="8" data-name="Kiln Garden Bracelet">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/彩色珠子手链极浅灰底主图.jpg" alt="Kiln Garden Bracelet" loading="lazy"/>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Kiln Garden Bracelet</h3>
+            <p class="text-on-surface-variant text-xs">Glazed Ceramic Beads</p>
+            <span class="font-label text-sm text-secondary block pt-1">$86</span>
+          </div>
+        </a>
+
+        <!-- Product 9: Orb Vase -->
+        <a href="#" class="product-card group" data-category="vases" data-price="195" data-tags="best-seller,limited" data-order="9" data-name="Orb Vase">
+          <div class="aspect-[3/4] bg-surface-container-low rounded-xl overflow-hidden mb-4 relative">
+            <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/export.jpg" alt="Orb Vase" loading="lazy"/>
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+              <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+            </div>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-headline text-base md:text-lg text-on-surface group-hover:text-secondary transition-colors">Orb Vase</h3>
+            <p class="text-on-surface-variant text-xs">Brushed White Clay</p>
+            <span class="font-label text-sm text-secondary block pt-1">$195</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     FROM THE STUDIO — Blog
+     ═══════════════════════════════════ -->
+<section class="py-20 md:py-28 bg-surface">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="flex flex-col md:flex-row justify-between items-baseline mb-14 gap-4">
+      <div>
+        <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">From the Studio</span>
+        <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface leading-tight">Stories Behind <span class="serif-italic">the Clay</span></h2>
+      </div>
+      <a class="fade-in fade-in-d2 text-on-surface-variant border-b border-outline-variant/30 pb-1 hover:text-secondary transition-colors font-label text-sm uppercase tracking-widest" href="#">View All Posts</a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+
+      <!-- Blog Card 1 -->
+      <a href="#" class="group">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-5 bg-surface-container-low">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6ClQ5wbGFg5V1YArpdHyP-v8a8SquROOdtN0AnFlU717AUUmdaiCe-RkxTAgsxUD6QVDbMxtGtsOiznOPCEcRGUu5MNUBDFigypKH9tmFWzBWmCvvlIZ1LiE-zGT30aUnTIzO6yaG_TTb7zsIhLUIxImEqnp72ohvT2Bej-YR7Rv0K1WUCTrPcwI1DDk1YgViFhVemK_cFTFqaWM5MMPKdLOUB2JOTn2dpqlp9f6XoZCjoZexBpOB78gwe2nG3gUfxjLXmcPi0jE" alt="The art of wheel throwing"/>
+        </div>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Process</span>
+          <span class="text-on-surface-variant text-xs">Mar 15, 2025</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors mb-2">The Meditation of Wheel Throwing</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed line-clamp-2">How the repetitive motion of centering clay becomes a practice of presence — and why every wobble matters.</p>
+      </a>
+
+      <!-- Blog Card 2 -->
+      <a href="#" class="group">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-5 bg-surface-container-low">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHJv6ufrlrcpphTQiblzn6aCsmr0kCK5i9bmAJ1LGTH7p0gitdDvN50gb-mSxv0BmaS5YXRHiibDBGfc9x_iRMEsMBq5sVQgPw9SIGxb8_envib38oAR5jsUFd1YvLD2tG_ysvfUdt4yekjkgcTmTv-yuTpH-cNpdC8gn98_NpoFjIfAAoMGl_WaVZDs5iAmyJOvxXht8uPRLhbmRP9g2G8I1cIglKkAcHMGwiRerOm-hZiebXjqfEtKC74WlwdmMwtxYy6ZOU5Lc" alt="Tea ceremony setup"/>
+        </div>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-wider">Living</span>
+          <span class="text-on-surface-variant text-xs">Feb 28, 2025</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors mb-2">Setting the Table With Intention</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed line-clamp-2">A guide to building your daily tea ritual around handmade vessels — because the cup shapes the experience.</p>
+      </a>
+
+      <!-- Blog Card 3 -->
+      <a href="#" class="group">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-5 bg-surface-container-low">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCz8TbyKY9gPrxUp_baYVGHyRtZgRAf_-T39ORQIye25_Yn_-VBkVhEG_2y6eBJ3xpK2zGPk2CPhVn6dl-uySJPSkl7hfBjnldMlQk_HNl0P5SaK9k2mQNZ7Ra5RuGG4YmwyJhWDK4w4wNtd0spyqBXgTfT-VUlGd_ZwhYwSS5P93c5-LLNH4w6xucrATQRC-cZuvPr0Wvr1LX6z8JnFYDnJjJwDT7QT0prtG3Mi0SKS3swuYxz5FtwEgAo8nKokyRyEYZfjNGckik" alt="Glaze experiments"/>
+        </div>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Craft</span>
+          <span class="text-on-surface-variant text-xs">Feb 10, 2025</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface group-hover:text-secondary transition-colors mb-2">The Alchemy of Glaze</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed line-clamp-2">From raw minerals to luminous surfaces — a peek into our glaze kitchen and the happy accidents that define our palette.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════
+     FOOTER (same as homepage)
+     ═══════════════════════════════════ -->
+<footer class="bg-surface-container-low pt-20 pb-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="col-span-1"><img src="logo.png" alt="LumiClay" class="h-8 w-auto mb-4"/><p class="text-on-surface-variant/80 font-body body-sm leading-relaxed max-w-xs">Finding the light within clay. Every imperfection is a breath, every piece a story.</p></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Explore</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shop All</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Collections</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Care Guide</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Wholesale</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Support</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shipping &amp; Returns</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Privacy Policy</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Contact Us</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Connect</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Instagram</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Pinterest</a></li></ul></div>
+</div>
+<div class="px-12 pt-10 border-t border-outline-variant/10 text-center">
+<p class="text-on-surface-variant/80 font-body text-[10px] tracking-widest uppercase">&copy; 2025 LumiClay. From earth to light, one piece at a time.</p>
+</div>
+</footer>
+
+<!-- ═══════════════════════════════════
+     MOBILE FILTER DRAWER
+     ═══════════════════════════════════ -->
+<div class="filter-overlay fixed inset-0 z-[80] bg-black/40" id="filterOverlay"></div>
+<div class="filter-drawer fixed bottom-0 left-0 right-0 z-[81] bg-surface rounded-t-2xl max-h-[85vh] flex flex-col" id="filterDrawer">
+  <!-- Drawer handle -->
+  <div class="flex items-center justify-between px-6 py-5 flex-shrink-0">
+    <h3 class="font-headline text-xl text-on-surface">Filters</h3>
+    <button class="material-symbols-outlined text-2xl text-on-surface-variant hover:text-on-surface transition-colors" id="filterDrawerClose">close</button>
+  </div>
+
+  <!-- Scrollable filter content -->
+  <div class="flex-1 overflow-y-auto px-6 pb-6 no-scrollbar">
+
+    <!-- Category -->
+    <div class="mb-8">
+      <button class="filter-toggle-m flex items-center justify-between w-full mb-4" data-group="m-category">
+        <h4 class="font-headline text-base text-on-surface">Category</h4>
+        <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+      </button>
+      <div class="filter-group-content open" data-group="m-category">
+        <div class="space-y-4 pb-2">
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="category" value="vases"/><span class="font-label text-sm text-on-surface-variant">Vases & Vessels</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="category" value="earrings"/><span class="font-label text-sm text-on-surface-variant">Earrings</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="category" value="bracelets"/><span class="font-label text-sm text-on-surface-variant">Bracelets</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="category" value="necklaces"/><span class="font-label text-sm text-on-surface-variant">Necklaces</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-8">
+      <button class="filter-toggle-m flex items-center justify-between w-full mb-4" data-group="m-price">
+        <h4 class="font-headline text-base text-on-surface">Price</h4>
+        <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+      </button>
+      <div class="filter-group-content open" data-group="m-price">
+        <div class="space-y-4 pb-2">
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="price" value="under100"/><span class="font-label text-sm text-on-surface-variant">Under $100</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="price" value="100to200"/><span class="font-label text-sm text-on-surface-variant">$100 – $200</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="price" value="200to300"/><span class="font-label text-sm text-on-surface-variant">$200 – $300</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="price" value="300plus"/><span class="font-label text-sm text-on-surface-variant">$300+</span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="mb-8">
+      <button class="filter-toggle-m flex items-center justify-between w-full mb-4" data-group="m-tags">
+        <h4 class="font-headline text-base text-on-surface">Tags</h4>
+        <span class="material-symbols-outlined filter-chevron open text-on-surface-variant text-xl">expand_more</span>
+      </button>
+      <div class="filter-group-content open" data-group="m-tags">
+        <div class="space-y-4 pb-2">
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="tags" value="best-seller"/><span class="font-label text-sm text-on-surface-variant">Best Seller</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="tags" value="new"/><span class="font-label text-sm text-on-surface-variant">New Arrival</span></label>
+          <label class="flex items-center gap-3 cursor-pointer"><input type="checkbox" class="filter-check" data-filter="tags" value="limited"/><span class="font-label text-sm text-on-surface-variant">Limited Edition</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer footer -->
+  <div class="flex-shrink-0 px-6 py-5 bg-surface" style="box-shadow:0 -1px 0 rgba(0,0,0,0.04)">
+    <div class="flex gap-3">
+      <button class="flex-1 py-3.5 rounded-full border border-outline-variant/40 font-label text-xs uppercase tracking-widest text-on-surface-variant hover:border-secondary transition-colors" id="drawerClear">Clear All</button>
+      <button class="flex-1 py-3.5 rounded-full bg-secondary text-on-secondary font-label text-xs uppercase tracking-widest hover:bg-secondary-dim transition-colors" id="drawerApply">Show Results</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════ -->
+<script>
+(function(){
+  /* ── Elements ── */
+  const grid = document.getElementById('productGrid');
+  const cards = Array.from(grid.querySelectorAll('.product-card'));
+  const countEl = document.getElementById('productCount');
+  const emptyState = document.getElementById('emptyState');
+  const activeFiltersEl = document.getElementById('activeFilters');
+  const clearAllBtn = document.getElementById('clearAll');
+
+  /* ── Filter State ── */
+  let filters = { category: [], price: [], tags: [] };
+  let currentSort = 'featured';
+
+  /* Price range helper */
+  function priceInRange(price, range) {
+    const p = parseFloat(price);
+    switch(range) {
+      case 'under100': return p < 100;
+      case '100to200': return p >= 100 && p <= 200;
+      case '200to300': return p > 200 && p <= 300;
+      case '300plus':  return p > 300;
+      default: return true;
+    }
+  }
+
+  /* ── Apply Filters ── */
+  function applyFilters() {
+    let visible = 0;
+
+    cards.forEach(card => {
+      const cat = card.dataset.category;
+      const price = card.dataset.price;
+      const tags = card.dataset.tags ? card.dataset.tags.split(',') : [];
+
+      let show = true;
+
+      // Category filter (OR within group)
+      if (filters.category.length > 0 && !filters.category.includes(cat)) show = false;
+
+      // Price filter (OR within group)
+      if (filters.price.length > 0) {
+        const matchesAny = filters.price.some(r => priceInRange(price, r));
+        if (!matchesAny) show = false;
+      }
+
+      // Tags filter (OR within group)
+      if (filters.tags.length > 0) {
+        const matchesAny = filters.tags.some(t => tags.includes(t));
+        if (!matchesAny) show = false;
+      }
+
+      if (show) {
+        card.classList.remove('hiding');
+        card.style.display = '';
+        visible++;
+      } else {
+        card.classList.add('hiding');
+        setTimeout(() => {
+          if (card.classList.contains('hiding')) card.style.display = 'none';
+        }, 400);
+      }
+    });
+
+    // Update count
+    countEl.textContent = visible;
+
+    // Empty state
+    emptyState.classList.toggle('hidden', visible > 0);
+    grid.classList.toggle('hidden', visible === 0);
+
+    // Active filter chips
+    renderActiveFilters();
+
+    // Sort
+    sortCards();
+  }
+
+  /* ── Sort ── */
+  function sortCards() {
+    const parent = grid;
+    const sorted = cards.filter(c => !c.classList.contains('hiding')).sort((a, b) => {
+      switch(currentSort) {
+        case 'price-asc': return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+        case 'price-desc': return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+        case 'newest': return parseInt(b.dataset.order) - parseInt(a.dataset.order);
+        default: return parseInt(a.dataset.order) - parseInt(b.dataset.order);
+      }
+    });
+    sorted.forEach(c => parent.appendChild(c));
+    // Also re-append hidden cards
+    cards.filter(c => c.classList.contains('hiding')).forEach(c => parent.appendChild(c));
+  }
+
+  /* ── Active Filter Chips ── */
+  const labelMap = {
+    vases: 'Vases', earrings: 'Earrings', bracelets: 'Bracelets', necklaces: 'Necklaces',
+    under100: 'Under $100', '100to200': '$100–$200', '200to300': '$200–$300', '300plus': '$300+',
+    'best-seller': 'Best Seller', 'new': 'New', limited: 'Limited'
+  };
+
+  function renderActiveFilters() {
+    const all = [...filters.category, ...filters.price, ...filters.tags];
+    if (all.length === 0) {
+      activeFiltersEl.classList.add('hidden');
+      clearAllBtn.classList.add('hidden');
+      updateMobileCount(0);
+      return;
+    }
+    activeFiltersEl.classList.remove('hidden');
+    clearAllBtn.classList.remove('hidden');
+    updateMobileCount(all.length);
+
+    activeFiltersEl.innerHTML = all.map(v =>
+      `<button class="active-chip inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary/8 font-label text-xs tracking-wide text-secondary hover:bg-secondary/15 transition-colors" data-value="${v}">
+        ${labelMap[v] || v}
+        <span class="material-symbols-outlined text-sm">close</span>
+      </button>`
+    ).join('');
+
+    // Chip remove handlers
+    activeFiltersEl.querySelectorAll('.active-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const val = chip.dataset.value;
+        for (const key in filters) {
+          filters[key] = filters[key].filter(v => v !== val);
+        }
+        syncCheckboxes();
+        applyFilters();
+      });
+    });
+  }
+
+  function updateMobileCount(n) {
+    const badge = document.getElementById('mobileFilterCount');
+    if (badge) {
+      badge.textContent = n;
+      badge.classList.toggle('show', n > 0);
+    }
+  }
+
+  /* ── Sync checkboxes to filter state ── */
+  function syncCheckboxes() {
+    document.querySelectorAll('.filter-check').forEach(cb => {
+      const group = cb.dataset.filter;
+      const val = cb.value;
+      cb.checked = filters[group] && filters[group].includes(val);
+    });
+  }
+
+  /* ── Checkbox change handler ── */
+  document.querySelectorAll('.filter-check').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const group = cb.dataset.filter;
+      const val = cb.value;
+
+      if (cb.checked) {
+        if (!filters[group].includes(val)) filters[group].push(val);
+      } else {
+        filters[group] = filters[group].filter(v => v !== val);
+      }
+
+      // Sync paired checkboxes (desktop ↔ mobile)
+      document.querySelectorAll(`.filter-check[data-filter="${group}"][value="${val}"]`).forEach(pair => {
+        pair.checked = cb.checked;
+      });
+
+      applyFilters();
+    });
+  });
+
+  /* ── Clear All ── */
+  function clearAll() {
+    filters = { category: [], price: [], tags: [] };
+    syncCheckboxes();
+    applyFilters();
+  }
+  clearAllBtn.addEventListener('click', clearAll);
+  document.getElementById('emptyReset').addEventListener('click', clearAll);
+  document.getElementById('drawerClear').addEventListener('click', () => { clearAll(); closeDrawer(); });
+
+  /* ── Sort Dropdown ── */
+  const sortBtn = document.getElementById('sortBtn');
+  const sortDropdown = document.getElementById('sortDropdown');
+  const sortLabel = document.getElementById('sortLabel');
+
+  sortBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortDropdown.classList.toggle('open');
+  });
+
+  document.querySelectorAll('.sort-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      currentSort = opt.dataset.sort;
+      sortLabel.textContent = opt.textContent;
+
+      // Update active state
+      document.querySelectorAll('.sort-option').forEach(o => {
+        o.classList.toggle('text-on-surface', o.dataset.sort === currentSort);
+        o.classList.toggle('text-on-surface-variant', o.dataset.sort !== currentSort);
+      });
+
+      sortDropdown.classList.remove('open');
+      sortCards();
+    });
+  });
+
+  document.addEventListener('click', () => sortDropdown.classList.remove('open'));
+
+  /* ── Filter Group Toggles ── */
+  document.querySelectorAll('.filter-toggle, .filter-toggle-m').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.dataset.group;
+      const content = document.querySelector(`.filter-group-content[data-group="${group}"]`);
+      const chevron = btn.querySelector('.filter-chevron');
+      content.classList.toggle('open');
+      chevron.classList.toggle('open');
+    });
+  });
+
+  /* ── Mobile Filter Drawer ── */
+  const overlay = document.getElementById('filterOverlay');
+  const drawer = document.getElementById('filterDrawer');
+  const openBtn = document.getElementById('mobileFilterBtn');
+
+  function openDrawer() {
+    overlay.classList.add('open');
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    overlay.classList.remove('open');
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  openBtn.addEventListener('click', openDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.getElementById('filterDrawerClose').addEventListener('click', closeDrawer);
+  document.getElementById('drawerApply').addEventListener('click', closeDrawer);
+
+  /* ── Scroll Fade In ── */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  /* ── Mega Menu ── */
+  const triggers = document.querySelectorAll('.mega-trigger');
+  const nav = document.getElementById('mainNav');
+  let closeTimer = null;
+
+  triggers.forEach(trigger => {
+    const panel = trigger.querySelector('.mega-panel');
+    if (!panel) return;
+
+    function open() {
+      clearTimeout(closeTimer);
+      document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open'));
+      panel.style.top = nav.offsetHeight + 'px';
+      panel.classList.add('open');
+    }
+    function scheduleClose() {
+      closeTimer = setTimeout(() => panel.classList.remove('open'), 200);
+    }
+    trigger.addEventListener('mouseenter', open);
+    trigger.addEventListener('mouseleave', scheduleClose);
+    panel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    panel.addEventListener('mouseleave', scheduleClose);
+  });
+
+  window.addEventListener('scroll', () => {
+    document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open'));
+  }, { passive: true });
+
+  /* ── Mobile Menu ── */
+  const mobileMenu = document.getElementById('mobileMenu');
+  document.getElementById('mobileMenuBtn').addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
+  document.getElementById('mobileMenuClose').addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
+
+  /* ── Nav: hide on scroll down, show on scroll up ── */
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y - lastY > 5 && y > 100) {
+      nav.style.transform = 'translateY(-100%)';
+    } else if (lastY > y && lastY - y > 5) {
+      nav.style.transform = 'translateY(0)';
+    }
+    lastY = y;
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>

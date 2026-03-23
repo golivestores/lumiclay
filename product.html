@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Volcanic Calm Bracelet | LumiClay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "on-primary":"#faf7f7","surface-container-high":"#e5eae0","outline":"#767c74",
+        "on-primary-container":"#525252","tertiary-container":"#eeb496",
+        "surface":"#fafaf5","surface-container-highest":"#dee4da","background":"#fafaf5",
+        "surface-container-low":"#f3f4ee","on-tertiary-container":"#59331d",
+        "inverse-surface":"#0d0f0c","on-tertiary":"#fff7f5","surface-bright":"#fafaf5",
+        "surface-dim":"#d5dcd0","secondary-fixed":"#f4e0be","on-secondary-container":"#5e5036",
+        "secondary":"#5C3D2E","primary":"#5f5e5e","tertiary":"#A0674A",
+        "surface-variant":"#dee4da","primary-container":"#e4e2e1",
+        "on-background":"#2e342d","secondary-container":"#f4e0be",
+        "on-surface-variant":"#5b6159","on-secondary":"#fff8f1","primary-dim":"#525252",
+        "on-surface":"#2e342d","outline-variant":"#aeb4aa",
+        "surface-container-lowest":"#ffffff","surface-container":"#ecefe7",
+        "secondary-dim":"#4A2E22","secondary-fixed-dim":"#e6d2b0",
+        "gold":"#c9a96e","kiln":"#2c2820",
+      },
+      fontFamily: { "headline":["Noto Serif"], "body":["Manrope"], "label":["Manrope"] },
+      borderRadius: {"DEFAULT":"0.25rem","lg":"0.75rem","xl":"1rem","full":"9999px"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+  display: inline-block; line-height: 1;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.serif-italic { font-family: 'Noto Serif'; font-style: italic; }
+
+/* ── Scroll Fade In ── */
+.fade-in {
+  opacity: 0; transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+.fade-in-d1 { transition-delay: 0.1s; }
+.fade-in-d2 { transition-delay: 0.2s; }
+.fade-in-d3 { transition-delay: 0.3s; }
+.fade-in-d4 { transition-delay: 0.4s; }
+.fade-in-d5 { transition-delay: 0.5s; }
+
+/* ── Mega Menu ── */
+.mega-panel {
+  position: fixed; top: auto; left: 0; right: 0; width: 100%;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.3s, visibility 0.3s; z-index: 200;
+}
+.mega-panel.open { opacity: 1; visibility: visible; pointer-events: auto; }
+
+/* ── Gallery ── */
+.gallery-thumb {
+  opacity: 0.5; transition: all 0.3s; cursor: pointer;
+  border: 2px solid transparent;
+}
+.gallery-thumb.active {
+  opacity: 1; border-color: #5C3D2E;
+}
+.gallery-thumb:hover { opacity: 0.85; }
+
+.gallery-main-img {
+  transition: opacity 0.5s ease;
+}
+.gallery-main-img.switching { opacity: 0; }
+
+/* ── Zoom lens ── */
+.zoom-container { position: relative; overflow: hidden; cursor: crosshair; }
+.zoom-container img.zoomed {
+  transform: scale(2);
+  transition: transform 0.1s ease-out;
+}
+
+/* ── Qty Spinner ── */
+.qty-btn {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  border-radius: 9999px; border: 1.5px solid #aeb4aa; background: transparent;
+  color: #5b6159; cursor: pointer; transition: all 0.2s;
+  font-size: 18px; line-height: 1;
+}
+.qty-btn:hover { border-color: #5C3D2E; color: #5C3D2E; }
+
+/* ── Process steps horizontal scroll indicator ── */
+.process-step {
+  counter-increment: step;
+}
+.process-step::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: 'Noto Serif'; font-style: italic;
+  font-size: 3rem; line-height: 1; color: rgba(92,61,46,0.12);
+  position: absolute; top: -0.5rem; left: 0;
+}
+
+/* ── Parallax section ── */
+.parallax-section {
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+@media (max-width: 768px) {
+  .parallax-section { background-attachment: scroll; }
+}
+
+/* ── Material detail cards ── */
+.material-card {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+}
+.material-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+}
+
+/* ── Dimension interactive ── */
+.dim-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: #5C3D2E; position: absolute; cursor: pointer;
+  animation: pulse-dot 2s infinite;
+}
+.dim-dot::after {
+  content: ''; position: absolute; inset: -4px;
+  border-radius: 50%; border: 1.5px solid #5C3D2E;
+  animation: pulse-ring 2s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.dim-label {
+  position: absolute; padding: 6px 14px;
+  background: #2c2820; color: #fff; font-size: 11px;
+  font-family: 'Manrope'; letter-spacing: 0.05em;
+  border-radius: 6px; white-space: nowrap;
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+}
+.dim-dot:hover + .dim-label,
+.dim-label.show { opacity: 1; }
+
+/* ── Review stars ── */
+.star-fill { color: #c9a96e; }
+.star-empty { color: #dee4da; }
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-secondary-container selection:text-on-secondary-container">
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="fixed top-0 w-full z-[100] transition-all duration-500" id="mainNav" style="background:rgba(250,248,244,0.92);backdrop-filter:blur(20px) saturate(1.2);box-shadow:0 1px 0 rgba(0,0,0,0.04)">
+<div class="relative flex items-center w-full px-8 py-4 max-w-screen-2xl mx-auto">
+<div class="hidden md:flex gap-8 items-center">
+  <div class="mega-trigger">
+    <a class="text-secondary border-b border-secondary/30 pb-1 font-label text-sm tracking-wide cursor-pointer" href="#">Shop</a>
+    <div class="mega-panel">
+      <div class="bg-white border-t border-outline-variant/10 shadow-2xl shadow-black/8">
+        <div class="max-w-screen-2xl mx-auto px-8 py-10">
+          <div class="grid grid-cols-6 gap-8">
+            <div class="col-span-2 space-y-6 pr-8 border-r border-outline-variant/10">
+              <h3 class="font-headline text-2xl italic text-on-surface mb-6">Find Your Light</h3>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Vases & Vessels</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Earrings</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Bracelets</span></a>
+              <a href="#" class="flex items-center gap-4 group py-2"><span class="w-2 h-2 rounded-full bg-secondary opacity-0 group-hover:opacity-100 transition-opacity"></span><span class="font-label text-sm tracking-wide text-on-surface-variant group-hover:text-secondary transition-colors">Necklaces</span></a>
+            </div>
+            <div class="col-span-4 grid grid-cols-4 gap-5">
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Star Column Vase</h4><span class="text-on-surface-variant text-xs">$268</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Jade Petal Drops</h4><span class="text-on-surface-variant text-xs">$88</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Volcanic Calm</h4><span class="text-on-surface-variant text-xs">$64</span></a>
+              <a href="#" class="group"><div class="aspect-square rounded-xl overflow-hidden bg-surface-container-low mb-3"><img src="export/陶瓷珠子项链极浅灰底主图.jpg" alt="Earth Pendant" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"/></div><h4 class="font-headline text-sm text-on-surface mb-0.5">Earth Pendant</h4><span class="text-on-surface-variant text-xs">$138</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Collections</a>
+</div>
+<a href="index.html" class="absolute left-1/2 -translate-x-1/2"><img alt="LumiClay" class="h-14 w-auto" src="logo.png"/></a>
+<div class="flex gap-6 items-center ml-auto">
+  <div class="hidden md:flex gap-8 mr-4">
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Our Story</a>
+    <a class="text-on-surface-variant hover:text-secondary transition-colors duration-300 font-label text-sm tracking-wide" href="#">Process</a>
+  </div>
+  <button class="material-symbols-outlined text-secondary scale-95">search</button>
+  <button class="material-symbols-outlined text-secondary scale-95">person</button>
+  <button class="material-symbols-outlined text-secondary scale-95 relative">shopping_bag<span class="absolute -top-1 -right-1 w-4 h-4 bg-tertiary text-white text-[9px] rounded-full flex items-center justify-center font-label">2</span></button>
+  <button class="md:hidden material-symbols-outlined text-secondary" id="mobileMenuBtn">menu</button>
+</div>
+</div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="fixed inset-0 z-[99] bg-surface translate-x-full transition-transform duration-500 flex flex-col pt-24 px-8 pb-8" id="mobileMenu">
+  <button class="absolute top-5 right-6 material-symbols-outlined text-2xl text-on-surface" id="mobileMenuClose">close</button>
+  <div class="space-y-6 flex-1">
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Shop</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Collections</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Our Story</a>
+    <a href="#" class="block font-headline text-3xl italic text-on-surface">Process</a>
+  </div>
+</div>
+
+<main class="pt-[88px]">
+
+<!-- ═══════════════════════════════════
+     PRODUCT HERO — Gallery + Info
+     ═══════════════════════════════════ -->
+<section class="bg-surface">
+  <div class="max-w-screen-2xl mx-auto px-6 md:px-8 py-8 md:py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-[55%_40%] gap-10 lg:gap-[5%]">
+
+      <!-- LEFT: Image Gallery -->
+      <div class="flex flex-col-reverse md:flex-row gap-4">
+        <!-- Thumbnails (vertical strip) -->
+        <div class="flex md:flex-col gap-3 overflow-x-auto md:overflow-y-auto no-scrollbar md:max-h-[640px]">
+          <button class="gallery-thumb active flex-shrink-0 w-20 h-20 md:w-[88px] md:h-[88px] rounded-lg overflow-hidden" data-index="0">
+            <img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Main view" class="w-full h-full object-cover"/>
+          </button>
+          <button class="gallery-thumb flex-shrink-0 w-20 h-20 md:w-[88px] md:h-[88px] rounded-lg overflow-hidden" data-index="1">
+            <img src="黑色火山石手链暗色场景图.jpg" alt="Scene view" class="w-full h-full object-cover"/>
+          </button>
+          <button class="gallery-thumb flex-shrink-0 w-20 h-20 md:w-[88px] md:h-[88px] rounded-lg overflow-hidden" data-index="2">
+            <img src="export/彩色珠子手链极浅灰底主图.jpg" alt="Variant" class="w-full h-full object-cover"/>
+          </button>
+          <button class="gallery-thumb flex-shrink-0 w-20 h-20 md:w-[88px] md:h-[88px] rounded-lg overflow-hidden" data-index="3">
+            <img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Detail" class="w-full h-full object-cover" style="object-position: 60% 80%"/>
+          </button>
+        </div>
+        <!-- Main image with zoom -->
+        <div class="flex-1 zoom-container rounded-xl overflow-hidden bg-surface-container-low aspect-square md:aspect-[3/4]" id="mainImageWrap">
+          <img id="mainImage" class="gallery-main-img w-full h-full object-cover" src="export/黑色火山石手链极浅灰底主图.jpg" alt="Volcanic Calm Bracelet"/>
+        </div>
+      </div>
+
+      <!-- RIGHT: Product Info -->
+      <div class="flex flex-col justify-center py-4 lg:py-8">
+        <!-- Process Chips -->
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Hand-formed</span>
+          <span class="px-4 py-1.5 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Lava Stone</span>
+          <span class="px-4 py-1.5 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+        </div>
+
+        <h1 class="font-headline text-4xl md:text-5xl text-on-surface tracking-tight leading-[1.1] mb-3">
+          Volcanic Calm<br/><span class="serif-italic">Bracelet</span>
+        </h1>
+
+        <!-- Rating -->
+        <div class="flex items-center gap-3 mb-6">
+          <div class="flex gap-0.5">
+            <span class="material-symbols-outlined text-lg star-fill" style="font-variation-settings:'FILL' 1">star</span>
+            <span class="material-symbols-outlined text-lg star-fill" style="font-variation-settings:'FILL' 1">star</span>
+            <span class="material-symbols-outlined text-lg star-fill" style="font-variation-settings:'FILL' 1">star</span>
+            <span class="material-symbols-outlined text-lg star-fill" style="font-variation-settings:'FILL' 1">star</span>
+            <span class="material-symbols-outlined text-lg star-fill" style="font-variation-settings:'FILL' 1">star_half</span>
+          </div>
+          <span class="font-label text-sm text-on-surface-variant">4.8 (124 reviews)</span>
+        </div>
+
+        <!-- Price -->
+        <div class="flex items-baseline gap-4 mb-8">
+          <span class="font-headline text-3xl text-secondary">$64</span>
+          <span class="text-on-surface-variant text-sm line-through">$80</span>
+          <span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary font-label text-xs">Save 20%</span>
+        </div>
+
+        <!-- Description -->
+        <p class="text-on-surface-variant text-base leading-relaxed mb-8 max-w-md">
+          Born from volcanic stone and shaped by patient hands, this bracelet carries the quiet strength of the earth. Each bead is individually selected and polished, threaded on a hand-knotted elastic cord for a meditative weight on your wrist.
+        </p>
+
+        <!-- Size selector -->
+        <div class="mb-8">
+          <p class="font-label text-xs uppercase tracking-widest text-on-surface mb-3">Size</p>
+          <div class="flex gap-3">
+            <button class="size-btn px-6 py-3 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">S <span class="text-[10px] text-outline-variant ml-1">15cm</span></button>
+            <button class="size-btn active px-6 py-3 rounded-full border border-secondary bg-secondary/5 font-label text-sm text-secondary transition-all">M <span class="text-[10px] ml-1">17cm</span></button>
+            <button class="size-btn px-6 py-3 rounded-full border border-outline-variant/40 font-label text-sm text-on-surface-variant hover:border-secondary hover:text-secondary transition-all">L <span class="text-[10px] text-outline-variant ml-1">19cm</span></button>
+          </div>
+        </div>
+
+        <!-- Quantity + Add to Cart -->
+        <div class="flex items-center gap-4 mb-8">
+          <div class="flex items-center gap-3">
+            <button class="qty-btn" id="qtyMinus">
+              <span class="material-symbols-outlined text-xl">remove</span>
+            </button>
+            <span class="font-label text-lg text-on-surface w-8 text-center" id="qtyValue">1</span>
+            <button class="qty-btn" id="qtyPlus">
+              <span class="material-symbols-outlined text-xl">add</span>
+            </button>
+          </div>
+          <button class="flex-1 py-4 rounded-full font-label text-sm uppercase tracking-widest text-white transition-all duration-300 hover:brightness-110 hover:shadow-lg hover:shadow-secondary/20 active:scale-[0.98]" style="background:linear-gradient(135deg,#5C3D2E,#A0674A)">
+            Add to Cart — $64
+          </button>
+        </div>
+
+        <!-- Buy Now -->
+        <button class="w-full py-4 rounded-full border border-secondary font-label text-sm uppercase tracking-widest text-secondary hover:bg-secondary hover:text-on-secondary transition-all duration-300 active:scale-[0.98] mb-8">
+          Buy Now
+        </button>
+
+        <!-- Trust badges -->
+        <div class="grid grid-cols-3 gap-4 pt-6" style="border-top:1px solid rgba(174,180,170,0.15)">
+          <div class="flex flex-col items-center text-center gap-2">
+            <span class="material-symbols-outlined text-xl text-secondary">local_shipping</span>
+            <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Free Shipping</span>
+          </div>
+          <div class="flex flex-col items-center text-center gap-2">
+            <span class="material-symbols-outlined text-xl text-secondary">verified</span>
+            <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">Artisan Made</span>
+          </div>
+          <div class="flex flex-col items-center text-center gap-2">
+            <span class="material-symbols-outlined text-xl text-secondary">replay</span>
+            <span class="font-label text-[10px] uppercase tracking-widest text-on-surface-variant">30-Day Returns</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     THE STORY — Editorial text + parallax
+     ═══════════════════════════════════ -->
+<section class="relative overflow-hidden" style="min-height:70vh">
+  <div class="parallax-section absolute inset-0" style="background-image:url('黑色火山石手链暗色场景图.jpg')"></div>
+  <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30"></div>
+  <div class="relative z-10 max-w-screen-2xl mx-auto px-8 py-24 md:py-36 flex items-center" style="min-height:70vh">
+    <div class="max-w-xl">
+      <span class="fade-in text-gold font-label text-xs uppercase tracking-[0.3em] mb-5 block">The Story</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl lg:text-6xl text-white leading-[1.08] mb-8">
+        Forged in Fire,<br/><span class="serif-italic">Worn in Stillness</span>
+      </h2>
+      <p class="fade-in fade-in-d2 text-white/65 text-base md:text-lg leading-relaxed mb-6">
+        Deep beneath the surface, volcanic stone forms over millennia — compressed by immense pressure, tempered by heat that would consume most things. What emerges is something profoundly calm: dense, smooth, and grounding.
+      </p>
+      <p class="fade-in fade-in-d3 text-white/50 text-base leading-relaxed">
+        We select each piece of lava stone by hand from ethically sourced quarries, then shape and polish them into beads that carry the quiet weight of geological time. Paired with hand-glazed ceramic accent beads, this bracelet is both ornament and talisman.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     MATERIALS & DIMENSIONS — Interactive
+     ═══════════════════════════════════ -->
+<section class="py-20 md:py-28 bg-surface-container-low">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="text-center mb-16">
+      <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">Craftsmanship</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface">Materials & <span class="serif-italic">Details</span></h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-20">
+      <!-- Material Card 1 -->
+      <div class="fade-in material-card bg-surface-container-lowest rounded-xl p-8 md:p-10">
+        <div class="w-14 h-14 rounded-full bg-kiln/10 flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-secondary">landscape</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface mb-3">Volcanic Lava Stone</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Naturally formed basalt beads, each with unique micro-pores that give a matte, organic texture. Known for grounding energy and heat retention.</p>
+        <div class="flex flex-wrap gap-2 mt-5">
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Basalt</span>
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">8mm beads</span>
+        </div>
+      </div>
+      <!-- Material Card 2 -->
+      <div class="fade-in fade-in-d1 material-card bg-surface-container-lowest rounded-xl p-8 md:p-10">
+        <div class="w-14 h-14 rounded-full bg-tertiary/10 flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-tertiary">palette</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface mb-3">Glazed Ceramic Accents</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Three hand-painted ceramic beads anchor the design. Each is dipped in our signature ash glaze and kiln-fired at 1260°C for a glass-like luminosity.</p>
+        <div class="flex flex-wrap gap-2 mt-5">
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Stoneware</span>
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">1260°C</span>
+        </div>
+      </div>
+      <!-- Material Card 3 -->
+      <div class="fade-in fade-in-d2 material-card bg-surface-container-lowest rounded-xl p-8 md:p-10">
+        <div class="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-2xl text-gold">cable</span>
+        </div>
+        <h3 class="font-headline text-xl text-on-surface mb-3">Hand-Knotted Cord</h3>
+        <p class="text-on-surface-variant text-sm leading-relaxed">Woven from triple-strand elastic cord with a rated strength of 15kg. Hand-knotted between each bead for flexibility and durability that lasts years.</p>
+        <div class="flex flex-wrap gap-2 mt-5">
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">Triple-strand</span>
+          <span class="px-3 py-1 rounded-full bg-surface-container font-label text-[10px] uppercase tracking-wider text-on-surface-variant">15kg rated</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Dimension Diagram -->
+    <div class="bg-surface-container-lowest rounded-2xl p-8 md:p-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <img src="export/黑色火山石手链极浅灰底主图.jpg" alt="Dimensions" class="w-full rounded-xl"/>
+        </div>
+        <div>
+          <h3 class="font-headline text-2xl text-on-surface mb-6">Specifications</h3>
+          <div class="space-y-5">
+            <div class="flex justify-between items-center py-4" style="border-bottom:1px solid rgba(174,180,170,0.15)">
+              <span class="font-label text-sm text-on-surface">Material</span>
+              <span class="text-on-surface-variant text-sm">Natural Lava Stone + Ceramic</span>
+            </div>
+            <div class="flex justify-between items-center py-4 bg-secondary/5 rounded-lg px-4 -mx-4" style="border-bottom:1px solid rgba(174,180,170,0.15)">
+              <span class="font-label text-sm text-secondary font-semibold">Bead Size</span>
+              <span class="text-secondary text-sm">8mm diameter — signature size</span>
+            </div>
+            <div class="flex justify-between items-center py-4" style="border-bottom:1px solid rgba(174,180,170,0.15)">
+              <span class="font-label text-sm text-on-surface">Weight</span>
+              <span class="text-on-surface-variant text-sm">28g (Medium)</span>
+            </div>
+            <div class="flex justify-between items-center py-4" style="border-bottom:1px solid rgba(174,180,170,0.15)">
+              <span class="font-label text-sm text-on-surface">Cord</span>
+              <span class="text-on-surface-variant text-sm">Triple-strand elastic, hand-knotted</span>
+            </div>
+            <div class="flex justify-between items-center py-4" style="border-bottom:1px solid rgba(174,180,170,0.15)">
+              <span class="font-label text-sm text-on-surface">Firing Temp</span>
+              <span class="text-on-surface-variant text-sm">1260°C (ceramic accents)</span>
+            </div>
+          </div>
+          <p class="text-on-surface-variant text-xs mt-6 leading-relaxed">
+            <span class="material-symbols-outlined text-sm align-middle mr-1">info</span>
+            Each piece is handmade — slight variations in color and texture are natural and unique to your bracelet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     CARE INSTRUCTIONS — Visual
+     ═══════════════════════════════════ -->
+<section class="py-20 md:py-28 bg-kiln">
+  <div class="max-w-screen-xl mx-auto px-8">
+    <div class="text-center mb-16">
+      <span class="fade-in text-gold font-label text-xs uppercase tracking-[0.3em] mb-3 block">Living With Your Piece</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-white/95">Care <span class="serif-italic">Guide</span></h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="fade-in rounded-xl p-8 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+        <span class="material-symbols-outlined text-3xl text-gold mb-5 block">water_drop</span>
+        <h4 class="font-headline text-base text-white/90 mb-3">Water-Friendly</h4>
+        <p class="text-white/45 text-sm leading-relaxed">Lava stone is naturally water-resistant. Rinse under cool water and pat dry. Avoid soaps and chemicals.</p>
+      </div>
+      <div class="fade-in fade-in-d1 rounded-xl p-8 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+        <span class="material-symbols-outlined text-3xl text-gold mb-5 block">spa</span>
+        <h4 class="font-headline text-base text-white/90 mb-3">Essential Oils</h4>
+        <p class="text-white/45 text-sm leading-relaxed">The porous stone absorbs essential oils beautifully. Add 1–2 drops of lavender or eucalyptus for a calming scent.</p>
+      </div>
+      <div class="fade-in fade-in-d2 rounded-xl p-8 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+        <span class="material-symbols-outlined text-3xl text-gold mb-5 block">brightness_5</span>
+        <h4 class="font-headline text-base text-white/90 mb-3">Sun Exposure</h4>
+        <p class="text-white/45 text-sm leading-relaxed">Brief sunlight is fine, but prolonged UV can fade ceramic glazes. Store in a cool, shaded place when not wearing.</p>
+      </div>
+      <div class="fade-in fade-in-d3 rounded-xl p-8 text-center" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)">
+        <span class="material-symbols-outlined text-3xl text-gold mb-5 block">inventory_2</span>
+        <h4 class="font-headline text-base text-white/90 mb-3">Storage</h4>
+        <p class="text-white/45 text-sm leading-relaxed">Keep in the included linen pouch. Lay flat rather than hanging to prevent elastic cord from stretching over time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════
+     YOU MAY ALSO LIKE
+     ═══════════════════════════════════ -->
+<section class="py-20 md:py-28 bg-surface">
+  <div class="max-w-screen-2xl mx-auto px-8">
+    <div class="text-center mb-14">
+      <span class="fade-in text-secondary font-label text-xs uppercase tracking-[0.3em] mb-3 block">Complete the Set</span>
+      <h2 class="fade-in fade-in-d1 font-headline text-4xl md:text-5xl text-on-surface">You May Also <span class="serif-italic">Love</span></h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
+      <a href="#" class="fade-in group">
+        <div class="aspect-[3/4] bg-surface-container-lowest rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/彩色珠子手链极浅灰底主图.jpg" alt="Kiln Garden Bracelet" loading="lazy"/>
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+            <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+          </div>
+        </div>
+        <h3 class="font-headline text-base text-on-surface group-hover:text-secondary transition-colors">Kiln Garden Bracelet</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Glazed Ceramic Beads</p>
+        <span class="font-label text-sm text-secondary">$86</span>
+      </a>
+      <a href="#" class="fade-in fade-in-d1 group">
+        <div class="aspect-[3/4] bg-surface-container-lowest rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/陶瓷珠子项链极浅灰底主图.jpg" alt="Heart of Earth Pendant" loading="lazy"/>
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+            <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+          </div>
+        </div>
+        <h3 class="font-headline text-base text-on-surface group-hover:text-secondary transition-colors">Heart of Earth Pendant</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Hand-painted Ceramic</p>
+        <span class="font-label text-sm text-secondary">$138</span>
+      </a>
+      <a href="#" class="fade-in fade-in-d2 group">
+        <div class="aspect-[3/4] bg-surface-container-lowest rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/耳环极浅灰底主图.jpg" alt="Jade Petal Drops" loading="lazy"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-secondary text-on-secondary font-label text-[10px] uppercase tracking-wider">New</span>
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+            <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+          </div>
+        </div>
+        <h3 class="font-headline text-base text-on-surface group-hover:text-secondary transition-colors">Jade Petal Drops</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Marbled Porcelain</p>
+        <span class="font-label text-sm text-secondary">$88</span>
+      </a>
+      <a href="#" class="fade-in fade-in-d3 group">
+        <div class="aspect-[3/4] bg-surface-container-lowest rounded-xl overflow-hidden mb-4 relative">
+          <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="export/白色星形花瓶极浅灰底主图.jpg" alt="Star Column Vase" loading="lazy"/>
+          <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container font-label text-[10px] uppercase tracking-wider">Best Seller</span>
+          <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500 flex items-end justify-center pb-5 opacity-0 group-hover:opacity-100">
+            <span class="px-6 py-2.5 bg-white/95 backdrop-blur-sm rounded-full font-label text-xs uppercase tracking-widest text-on-surface shadow-lg translate-y-3 group-hover:translate-y-0 transition-transform duration-300">Quick View</span>
+          </div>
+        </div>
+        <h3 class="font-headline text-base text-on-surface group-hover:text-secondary transition-colors">Star Column Vase</h3>
+        <p class="text-on-surface-variant text-xs mb-1">Layered Porcelain</p>
+        <span class="font-label text-sm text-secondary">$268</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="bg-surface-container-low pt-20 pb-10">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full max-w-screen-2xl mx-auto">
+<div class="col-span-1"><img src="logo.png" alt="LumiClay" class="h-8 w-auto mb-4"/><p class="text-on-surface-variant/80 font-body body-sm leading-relaxed max-w-xs">Finding the light within clay. Every imperfection is a breath, every piece a story.</p></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Explore</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shop All</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Collections</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Care Guide</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Wholesale</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Support</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Shipping &amp; Returns</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Privacy Policy</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Contact Us</a></li></ul></div>
+<div><h5 class="font-label text-xs uppercase tracking-widest mb-6">Connect</h5><ul class="space-y-4"><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Instagram</a></li><li><a class="text-on-surface-variant/80 hover:text-secondary hover:underline underline-offset-4 transition-all body-sm" href="#">Pinterest</a></li></ul></div>
+</div>
+<div class="px-12 pt-10 border-t border-outline-variant/10 text-center">
+<p class="text-on-surface-variant/80 font-body text-[10px] tracking-widest uppercase">&copy; 2025 LumiClay. From earth to light, one piece at a time.</p>
+</div>
+</footer>
+
+<!-- ═══ JAVASCRIPT ═══ -->
+<script>
+(function(){
+
+  /* ── Gallery ── */
+  const thumbs = document.querySelectorAll('.gallery-thumb');
+  const mainImg = document.getElementById('mainImage');
+  const images = [
+    'export/黑色火山石手链极浅灰底主图.jpg',
+    '黑色火山石手链暗色场景图.jpg',
+    'export/彩色珠子手链极浅灰底主图.jpg',
+    'export/黑色火山石手链极浅灰底主图.jpg'
+  ];
+
+  thumbs.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const i = parseInt(thumb.dataset.index);
+      thumbs.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      mainImg.classList.add('switching');
+      setTimeout(() => {
+        mainImg.src = images[i];
+        mainImg.classList.remove('switching');
+      }, 250);
+    });
+  });
+
+  /* ── Zoom on hover (desktop only) ── */
+  const zoomWrap = document.getElementById('mainImageWrap');
+  if (window.matchMedia('(min-width:768px)').matches) {
+    zoomWrap.addEventListener('mousemove', (e) => {
+      const rect = zoomWrap.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      mainImg.style.transformOrigin = `${x}% ${y}%`;
+      mainImg.classList.add('zoomed');
+    });
+    zoomWrap.addEventListener('mouseleave', () => {
+      mainImg.classList.remove('zoomed');
+      mainImg.style.transformOrigin = 'center center';
+    });
+  }
+
+  /* ── Quantity ── */
+  const qtyVal = document.getElementById('qtyValue');
+  let qty = 1;
+  document.getElementById('qtyMinus').addEventListener('click', () => {
+    if (qty > 1) { qty--; qtyVal.textContent = qty; }
+  });
+  document.getElementById('qtyPlus').addEventListener('click', () => {
+    if (qty < 10) { qty++; qtyVal.textContent = qty; }
+  });
+
+  /* ── Size selector ── */
+  document.querySelectorAll('.size-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.size-btn').forEach(b => {
+        b.classList.remove('active','border-secondary','bg-secondary/5','text-secondary');
+        b.classList.add('border-outline-variant/40','text-on-surface-variant');
+      });
+      btn.classList.add('active','border-secondary','bg-secondary/5','text-secondary');
+      btn.classList.remove('border-outline-variant/40','text-on-surface-variant');
+    });
+  });
+
+
+  /* ── Scroll Fade In ── */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  /* ── Mega Menu ── */
+  const triggers = document.querySelectorAll('.mega-trigger');
+  const nav = document.getElementById('mainNav');
+  let closeTimer = null;
+  triggers.forEach(trigger => {
+    const panel = trigger.querySelector('.mega-panel');
+    if (!panel) return;
+    function open() { clearTimeout(closeTimer); document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open')); panel.style.top = nav.offsetHeight + 'px'; panel.classList.add('open'); }
+    function scheduleClose() { closeTimer = setTimeout(() => panel.classList.remove('open'), 200); }
+    trigger.addEventListener('mouseenter', open);
+    trigger.addEventListener('mouseleave', scheduleClose);
+    panel.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    panel.addEventListener('mouseleave', scheduleClose);
+  });
+  window.addEventListener('scroll', () => { document.querySelectorAll('.mega-panel.open').forEach(p => p.classList.remove('open')); }, { passive: true });
+
+  /* ── Mobile Menu ── */
+  const mobileMenu = document.getElementById('mobileMenu');
+  document.getElementById('mobileMenuBtn').addEventListener('click', () => mobileMenu.classList.remove('translate-x-full'));
+  document.getElementById('mobileMenuClose').addEventListener('click', () => mobileMenu.classList.add('translate-x-full'));
+
+  /* ── Nav hide/show on scroll ── */
+  let lastY = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > lastY && y - lastY > 5 && y > 100) { nav.style.transform = 'translateY(-100%)'; }
+    else if (lastY > y && lastY - y > 5) { nav.style.transform = 'translateY(0)'; }
+    lastY = y;
+  }, { passive: true });
+
+})();
+</script>
+</body>
+</html>
